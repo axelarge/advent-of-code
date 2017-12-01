@@ -35,7 +35,11 @@
 (def test-input "abc")
 (def real-input "cxdnnyjw")
 
-(defn solve1 [string] (apply str (take 8 (get-digits extract-digit string))))
+(defn solve1 [string]
+  (->> string
+       (get-digits extract-digit)
+       (take 8)
+       (apply str)))
 
 (def digits [{:position 7, :digit "c"}
              {:position 7, :digit "8"}
@@ -78,13 +82,18 @@
              {:position 5, :digit "2"}
              {:position 7, :digit "3"}])
 
-(defn solve2 [string] (apply str (take 8 (map :digit (get-digits extract-positioned-digit string)))))
+(defn solve2 [string]
+  (->> string
+       (get-digits extract-positioned-digit)
+       (map :digit)
+       (take 8)
+       (apply str)))
 
 (defn solve3 [digits]
-  (let [digit-map (reduce (fn [result digit]
+  (let [digit-map (reduce (fn [result {:keys [position digit]}]
                             (if (or (= (count result) 8)
-                                    (get result (:position digit)))
+                                    (get result position))
                               result
-                              (assoc result (:position digit) (:digit digit))))
+                              (assoc result position digit)))
                           {} digits)]
     (apply str (map (partial get digit-map) (range 8)))))

@@ -37,7 +37,7 @@
 
 (defn solve1 [string] (apply str (take 8 (get-digits extract-digit string))))
 
-(def digits ({:position 7, :digit "c"}
+(def digits [{:position 7, :digit "c"}
              {:position 7, :digit "8"}
              {:position 0, :digit "9"}
              {:position 6, :digit "e"}
@@ -76,7 +76,7 @@
              {:position 7, :digit "7"}
              {:position 3, :digit "b"}
              {:position 5, :digit "2"}
-             {:position 7, :digit "3"}))
+             {:position 7, :digit "3"}])
 
 (defn solve2 [string] (apply str (take 8 (map :digit (get-digits extract-positioned-digit string)))))
 

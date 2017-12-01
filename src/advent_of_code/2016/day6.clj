@@ -12,9 +12,14 @@
        transpose))
 
 (defn most-common-elements [coll]
-  (let [sorted (sort-by (comp - count) (vals (group-by identity coll)))
+  (let [sorted (->> coll
+                    (group-by identity)
+                    vals
+                    (sort-by (comp - count)))
         n (count (first sorted))]
-    (map first (take-while #(= (count %) n) sorted))))
+    (->> sorted
+         (take-while #(= (count %) n))
+         (map first))))
 
 (defn most-common-element [coll]
   (first (most-common-elements coll)))

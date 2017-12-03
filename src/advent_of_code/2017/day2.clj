@@ -1,0 +1,38 @@
+(ns advent-of-code.2017.day2
+  (:require [advent-of-code.support :refer :all]
+            [clojure.string :as str]))
+
+(def input (get-input 2017 2))
+
+(defn int-table [input]
+  (->> input
+       str/split-lines
+       (map split-whitespace)
+       (map2 parse-int)))
+
+(defn row-checksum [row]
+  (let [min-val (apply min row)
+        max-val (apply max row)]
+    (- max-val min-val)))
+
+(defn divisible-pair [row]
+  (loop [[x & xs] (sort row)]
+    (when xs
+      (if-let [dividend (find-where #(zero? (rem % x)) xs)]
+        (/ dividend x)
+        (recur xs)))))
+
+(defn solve
+  ([f]
+   (solve f input))
+  ([f input]
+   (->> input
+        int-table
+        (map f)
+        (apply +))))
+
+(def solve1
+  (partial solve row-checksum))
+
+(def solve2
+  (partial solve divisible-pair))

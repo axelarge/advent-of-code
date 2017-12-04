@@ -4,12 +4,6 @@
 
 (def input (get-input 2017 2))
 
-(defn int-table [input]
-  (->> input
-       str/split-lines
-       (map split-whitespace)
-       (map2 parse-int)))
-
 (defn row-checksum [row]
   (let [min-val (apply min row)
         max-val (apply max row)]
@@ -27,7 +21,7 @@
    (solve f input))
   ([f input]
    (->> input
-        int-table
+        (tokenize-lines parse-int)
         (map f)
         (apply +))))
 

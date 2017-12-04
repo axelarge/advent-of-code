@@ -1,5 +1,6 @@
-(ns advent-of-code.2016.day6
-  (:require [clojure.test :refer :all]))
+(ns advent-of-code.2016.day6-test
+  (:require [clojure.test :refer :all]
+            [advent-of-code.2016.day6 :refer :all]))
 
 (def test-input "eedadn\ndrvtee\neandsr\nraavrd\natevrs\ntsrnev\nsdttsa\nrasrtv\nnssdts\nntnada\nsvetve\ntesnvt\nvntsnd\nvrdear\ndvrsen\nenarar")
 

@@ -1,5 +1,6 @@
-(ns advent-of-code.2017.day2
-  (:require [clojure.test :refer :all]))
+(ns advent-of-code.2017.day2-test
+  (:require [clojure.test :refer :all]
+            [advent-of-code.2017.day2 :refer :all]))
 
 (deftest test-solve1
   (is (= (solve1 "5 1 9 5\n7 5 3\n2 4 6 8")

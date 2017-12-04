@@ -1,5 +1,6 @@
-(ns advent-of-code.2016.day2
-  (:require [clojure.test :refer :all]))
+(ns advent-of-code.2016.day2-test
+  (:require [clojure.test :refer :all]
+            [advent-of-code.2016.day2 :refer :all]))
 
 (def test-input "ULL\nRRDDD\nLURDL\nUUUUD")
 

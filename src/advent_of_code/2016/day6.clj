@@ -4,8 +4,6 @@
 
 (def input (get-input 2016 6))
 
-(defn transpose [m] (apply map list m))
-
 (defn parse-lines [lines]
   (->> (str/split-lines lines)
        (map #(str/split % #""))

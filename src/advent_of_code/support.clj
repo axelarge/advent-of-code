@@ -25,7 +25,8 @@
                    #(keep not-empty %)
                    split-whitespace)))))
 
-(defn transpose [m] (apply map vector m))
+(defn transpose [m]
+  (vec (apply map vector m)))
 
 (defn map2 [f coll]
   (map (partial map f) coll))

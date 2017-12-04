@@ -16,6 +16,11 @@
 
 (def split-whitespace (splitter #"\s+"))
 
+(defn tokenize-lines [input]
+  (->> input
+       str/split-lines
+       (map split-whitespace)))
+
 (defn map2 [f coll]
   (map (partial map f) coll))
 

@@ -15,8 +15,7 @@
    (solve f input))
   ([f input]
    (->> input
-        str/split-lines
-        (map #(str/split % #"\s+"))
+        tokenize-lines
         (filter (partial no-dupes-by f))
         count)))
 

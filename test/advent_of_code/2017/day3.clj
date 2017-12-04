@@ -6,3 +6,7 @@
   (is (= (solve1 12) 3))
   (is (= (solve1 23) 2))
   (is (= (solve1 1024) 31)))
+
+(deftest test-solve2
+  (is (= (solve2 50) 54))
+  (is (= (solve2 800) 806)))

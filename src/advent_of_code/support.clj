@@ -16,10 +16,16 @@
 
 (def split-whitespace (splitter #"\s+"))
 
-(defn tokenize-lines [input]
-  (->> input
-       str/split-lines
-       (map split-whitespace)))
+(defn tokenize-lines
+  ([input] (tokenize-lines identity input))
+  ([f input]
+   (->> input
+        str/split-lines
+        (map (comp #(map f %)
+                   #(keep not-empty %)
+                   split-whitespace)))))
+
+(defn transpose [m] (apply map vector m))
 
 (defn map2 [f coll]
   (map (partial map f) coll))

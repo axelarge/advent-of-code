@@ -13,7 +13,7 @@
          i 0
          jumps jumps]
     (let [[jumps i] (step jumps i f)]
-      (if (< -1 i (count jumps))
+      (if (contains? jumps i)
         (recur (inc n) i jumps)
         n))))
 
@@ -26,6 +26,4 @@
         (steps f))))
 
 (def solve1 (partial solve inc))
-(def solve2 (partial solve (fn [x] (if (>= x 3)
-                                     (dec x)
-                                     (inc x)))))
+(def solve2 (partial solve (fn [x] (if (< x 3) (inc x) (dec x)))))

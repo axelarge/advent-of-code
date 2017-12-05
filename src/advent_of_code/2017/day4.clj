@@ -5,10 +5,8 @@
 (def input (get-input 2017 4))
 
 (defn no-dupes-by [f phrase]
-  (->> phrase
-       (group-by f)
-       vals
-       (not-any? #(> (count %) 1))))
+  (= (count (distinct (map f phrase)))
+     (count phrase)))
 
 (defn solve
   ([f]

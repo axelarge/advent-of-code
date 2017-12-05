@@ -4,17 +4,17 @@
 
 (def input (get-input 2017 5))
 
-(defn step [jumps i f]
-  [(update jumps i f)
-   (+ i (nth jumps i))])
+(defn step [maze i f]
+  [(update maze i f)
+   (+ i (nth maze i))])
 
-(defn steps [f jumps]
+(defn steps [f maze]
   (loop [n 1
          i 0
-         jumps jumps]
-    (let [[jumps i] (step jumps i f)]
-      (if (contains? jumps i)
-        (recur (inc n) i jumps)
+         maze maze]
+    (let [[maze i] (step maze i f)]
+      (if (contains? maze i)
+        (recur (inc n) i maze)
         n))))
 
 (defn solve

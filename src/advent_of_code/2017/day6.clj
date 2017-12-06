@@ -38,3 +38,28 @@
 
 (def solve1 (comp first solve))
 (def solve2 (comp first step-until-seen second solve))
+
+;;; ------ faster solution using map instead of set ------
+
+(defn step-until-seen' [banks]
+  (loop [banks banks
+         seen {banks 1}]
+    (let [banks (step banks)]
+      (if (seen banks)
+        [seen banks]
+        (recur banks
+               (assoc seen banks (inc (count seen))))))))
+
+(defn solve'
+  ([] (solve' input))
+  ([input]
+   (->> input
+        split-whitespace
+        (mapv parse-int)
+        step-until-seen')))
+
+(def solve1' (comp count first solve'))
+(def solve2' (comp
+               (fn [[seen banks]]
+                 (inc (- (count seen) (seen banks))))
+               solve'))

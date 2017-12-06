@@ -11,3 +11,11 @@
 (deftest test-solve2
   (is (= (solve2 test-input) 4))
   (is (= (solve2) 2793)))
+
+(deftest test-solve1'
+  (is (= (solve1' test-input) 5))
+  (is (= (solve1') 4074)))
+
+(deftest test-solve2'
+  (is (= (solve2' test-input) 4))
+  (is (= (solve2') 2793)))

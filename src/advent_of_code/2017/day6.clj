@@ -43,12 +43,12 @@
 
 (defn step-until-seen' [banks]
   (loop [banks banks
-         seen {banks 1}]
+         seen {banks 0}]
     (let [banks (step banks)]
       (if (seen banks)
         [seen banks]
         (recur banks
-               (assoc seen banks (inc (count seen))))))))
+               (assoc seen banks (count seen)))))))
 
 (defn solve'
   ([] (solve' input))
@@ -61,5 +61,5 @@
 (def solve1' (comp count first solve'))
 (def solve2' (comp
                (fn [[seen banks]]
-                 (inc (- (count seen) (seen banks))))
+                 (- (count seen) (seen banks)))
                solve'))

@@ -1,6 +1,7 @@
 (ns advent-of-code.2017.day7-test
   (:require [clojure.test :refer :all]
-            [advent-of-code.2017.day7 :refer :all]))
+            [advent-of-code.2017.day7 :refer :all]
+            [criterium.core :refer [quick-bench]]))
 
 (def test-input
   (str "pbga (66)\n"
@@ -25,18 +26,10 @@
   (is (= (solve1' test-input) "tknk"))
   (is (= (solve1') "xegshds")))
 
-(deftest test-solve1''
-  (is (= (solve1'' test-input) "tknk"))
-  (is (= (solve1'') "xegshds")))
-
-(deftest test-solve1'''
-  (is (= (solve1''' test-input) "tknk"))
-  (is (= (solve1''') "xegshds")))
-
 (deftest test-solve2
   (is (= (solve2 test-input) 60))
   (is (= (solve2) 299)))
 
-(deftest test-solve2'
-  (is (= (solve2' test-input) 60))
-  (is (= (solve2') 299)))
+(comment
+  (quick-bench (solve1))
+  (quick-bench (solve1')))

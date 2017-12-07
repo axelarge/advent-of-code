@@ -32,4 +32,18 @@
   (map (partial map f) coll))
 
 (defn find-where [pred coll]
-  (->> coll (filter pred) first))
+  (some #(when (pred %) %) coll))
+
+(defn index-by
+  ([kf coll]
+   (index-by kf identity coll))
+  ([kf vf coll]
+   (->> coll
+        (map (juxt kf vf))
+        (into {}))))
+
+(defmacro catch-ex-data [& body]
+  `(try
+     ~@body
+     (catch Exception e#
+       (ex-data e#))))

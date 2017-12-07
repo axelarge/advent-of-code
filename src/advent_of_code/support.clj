@@ -34,6 +34,9 @@
 (defn find-where [pred coll]
   (some #(when (pred %) %) coll))
 
+(defn index-where [pred coll]
+  (first (keep-indexed (fn [idx x] (when (pred x) idx)) coll)))
+
 (defn index-by
   ([kf coll]
    (index-by kf identity coll))

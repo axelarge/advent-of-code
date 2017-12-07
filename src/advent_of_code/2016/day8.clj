@@ -69,13 +69,13 @@
        (reduce apply-command screen)))
 
 (defn solve1
-  ([] (solve1 input (make-screen 50 6)))
-  ([input screen]
+  ([input] (solve1 (make-screen 50 6) input))
+  ([screen input]
    (lit-count (display screen input))))
 
 (defn solve2
-  ([] (solve2 input (make-screen 50 6)))
-  ([input screen]
+  ([input] (solve2 (make-screen 50 6) input))
+  ([screen input]
    (-> (display screen input)
        draw
        (str/replace "." " "))))

@@ -18,11 +18,8 @@
         inside (set (map (comp reverse rest) (re-seq aba-pattern-inside ip)))]
     (some inside outside)))
 
-(defn solve
-  ([checker]
-   (solve checker input))
-  ([checker input]
-   (count (filter checker (str/split-lines input)))))
+(defn solve [checker input]
+  (count (filter checker (str/split-lines input))))
 
 (def solve1 (partial solve has-tls?))
 (def solve2 (partial solve has-ssl?))

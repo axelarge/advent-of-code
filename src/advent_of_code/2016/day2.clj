@@ -8,9 +8,6 @@
 (defn parse-steps [steps]
   (map parse-steps-line (str/split-lines steps)))
 
-(defn index-where [pred coll]
-  (first (keep-indexed (fn [idx x] (when (pred x) idx)) coll)))
-
 (defn find-in [keypad button]
   (first (keep-indexed
            (fn [row-idx row]
@@ -57,12 +54,10 @@
 
 (def input (get-input 2016 2))
 
-(defn solve
-  ([keypad] (solve keypad input))
-  ([keypad input]
-   (->> (parse-steps input)
-        (find-buttons keypad)
-        (apply str))))
+(defn solve [keypad input]
+  (->> (parse-steps input)
+       (find-buttons keypad)
+       (apply str)))
 
 (def solve1 (partial solve pad1))
 (def solve2 (partial solve pad2))

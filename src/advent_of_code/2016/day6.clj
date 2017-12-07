@@ -9,32 +9,14 @@
        (map #(str/split % #""))
        transpose))
 
-(defn most-common-elements [coll]
-  (let [sorted (->> coll
-                    (group-by identity)
-                    vals
-                    (sort-by (comp - count)))
-        n (count (first sorted))]
-    (->> sorted
-         (take-while #(= (count %) n))
-         (map first))))
+(defn find-element [f coll]
+  (first (apply f second (frequencies coll))))
 
-(defn most-common-element [coll]
-  (first (most-common-elements coll)))
+(defn solve [f input]
+  (->> input
+       parse-lines
+       (map (partial find-element f))
+       (apply str)))
 
-(defn least-common-element [coll]
-  (->> (group-by identity coll)
-       vals
-       (apply min-key count)
-       first))
-
-(defn solve
-  ([f] (solve f input))
-  ([f input]
-   (->> input
-        parse-lines
-        (map f)
-        (apply str))))
-
-(def solve1 (partial solve most-common-element))
-(def solve2 (partial solve least-common-element))
+(def solve1 (partial solve max-key))
+(def solve2 (partial solve min-key))

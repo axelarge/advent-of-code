@@ -14,17 +14,13 @@
        (map #(if % 1 0))
        (reduce +)))
 
-(defn solve1
-  ([] (solve1 input))
-  ([input]
-   (count-valid (tokenize-lines parse-int input))))
+(defn solve1 [input]
+  (count-valid (tokenize-lines parse-int input)))
 
-(defn solve2
-  ([] (solve2 input))
-  ([input]
-   (->> input
-        (tokenize-lines parse-int)
-        (partition 3)
-        (map transpose)
-        (apply concat)
-        count-valid)))
+(defn solve2 [input]
+  (->> input
+       (tokenize-lines parse-int)
+       (partition 3)
+       (map transpose)
+       (apply concat)
+       count-valid))

@@ -4,18 +4,15 @@
 
 (def input (get-input 2017 5))
 
-(defn step [maze i f]
-  [(update maze i f)
-   (+ i (nth maze i))])
-
 (defn steps [f maze]
-  (loop [n 1
+  (loop [n 0
          i 0
          maze maze]
-    (let [[maze i] (step maze i f)]
-      (if (contains? maze i)
-        (recur (inc n) i maze)
-        n))))
+    (if-let [v (get maze i)]
+      (recur (inc n)
+             (+ i v)
+             (assoc maze i (f v)))
+      n)))
 
 (defn solve [f input]
   (->> input
@@ -24,4 +21,4 @@
        (steps f)))
 
 (def solve1 (partial solve inc))
-(def solve2 (partial solve (fn [x] (if (< x 3) (inc x) (dec x)))))
+(def solve2 (partial solve #(if (< % 3) (inc %) (dec %))))

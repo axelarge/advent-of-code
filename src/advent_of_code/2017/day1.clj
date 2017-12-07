@@ -10,19 +10,15 @@
        (map (comp parse-int str first))
        (apply +)))
 
-(defn solve1
-  ([] (solve1 input))
-  ([s]
-   (->> (str s (first s))
-        (partition 2 1)
-        sum-valid-pairs)))
+(defn solve1 [input]
+  (->> (str input (first input))
+       (partition 2 1)
+       sum-valid-pairs))
 
-(defn solve2
-  ([] (solve2 input))
-  ([s]
-   (let [offset (/ (count s) 2)]
-     (->> s
-          cycle
-          (drop offset)
-          (map vector s)
-          sum-valid-pairs))))
+(defn solve2 [input]
+  (let [offset (/ (count input) 2)]
+    (->> input
+         cycle
+         (drop offset)
+         (map vector input)
+         sum-valid-pairs)))

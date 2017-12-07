@@ -1,6 +1,7 @@
 (ns advent-of-code.2017.day7
   (:require [advent-of-code.support :refer :all]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.set :as set]))
 
 (def input (get-input 2017 7))
 
@@ -43,8 +44,8 @@
 ; ----- Part 1 - sets -----
 
 (defn bottom' [tower]
-  (first (clojure.set/difference (set (keys tower))
-                                 (set (mapcat :children (vals tower))))))
+  (first (set/difference (set (keys tower))
+                         (set (mapcat :children (vals tower))))))
 
 ; ----- Part 2 -----
 
@@ -66,18 +67,16 @@
       (throw (ex-info "" {:result (should-weigh tower children top-weights)}))
       (apply + weight top-weights))))
 
-(defn input->tower
-  ([] (input->tower input))
-  ([input]
-   (->> input
-        str/split-lines
-        (map parse-line)
-        to-tower)))
+(defn input->tower [input]
+  (->> input
+       str/split-lines
+       (map parse-line)
+       to-tower))
 
 (def solve1 (comp bottom input->tower))
 (def solve1' (comp bottom' input->tower))
 
-(defn solve2 [& args]
-  (let [t (apply input->tower args)]
+(defn solve2 [input]
+  (let [t (input->tower input)]
     (:result (catch-ex-data (find-unbalanced t (bottom' t))))))
 

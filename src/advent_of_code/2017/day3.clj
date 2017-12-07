@@ -60,6 +60,23 @@
       direction
       turned)))
 
+(defn fill [limit]
+  (loop [pos [1 0]
+         direction :U
+         cells {[0 0] 1}]
+    (let [val (apply + (get-neighbors cells pos))
+          cells (assoc cells pos val)
+          pos (move pos direction)
+          direction (turn-left-if-possible cells pos direction)]
+      (if (> val limit)
+        [val pos direction cells]
+        (recur pos direction cells)))))
+
+(def solve1 distance)
+(def solve2 (comp first fill))
+
+;;; ----- debug -----
+
 (defn draw-table [cells]
   (let [xs (->> cells keys (map first))
         ys (->> cells keys (map second))
@@ -74,25 +91,3 @@
                     (map #(format (str "%" max-val-width "s") (str %)))
                     (str/join "  ")))]
     (str/join "\n" rows)))
-
-(defn fill [limit]
-  (loop [pos [1 0]
-         direction :U
-         cells {[0 0] 1}]
-    (let [val (apply + (get-neighbors cells pos))
-          cells (assoc cells pos val)
-          pos (move pos direction)
-          direction (turn-left-if-possible cells pos direction)]
-      (if (> val limit)
-        [val pos direction cells]
-        (recur pos direction cells)))))
-
-(defn solve1
-  ([] (solve1 input))
-  ([input]
-   (distance input)))
-
-(defn solve2
-  ([] (solve2 input))
-  ([input]
-   (first (fill input))))

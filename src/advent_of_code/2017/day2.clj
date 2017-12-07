@@ -16,17 +16,11 @@
         (/ dividend x)
         (recur xs)))))
 
-(defn solve
-  ([f]
-   (solve f input))
-  ([f input]
-   (->> input
-        (tokenize-lines parse-int)
-        (map f)
-        (apply +))))
+(defn solve [f input]
+  (->> input
+       (tokenize-lines parse-int)
+       (map f)
+       (apply +)))
 
-(def solve1
-  (partial solve row-checksum))
-
-(def solve2
-  (partial solve divisible-pair))
+(def solve1 (partial solve row-checksum))
+(def solve2 (partial solve divisible-pair))

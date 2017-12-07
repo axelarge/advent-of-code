@@ -20,16 +20,16 @@
 
 (deftest test-solve1
   (is (= (solve1 test-input) "tknk"))
-  (is (= (solve1) "xegshds")))
+  (is (= (solve1 input) "xegshds")))
 
 (deftest test-solve1'
   (is (= (solve1' test-input) "tknk"))
-  (is (= (solve1') "xegshds")))
+  (is (= (solve1' input) "xegshds")))
 
 (deftest test-solve2
   (is (= (solve2 test-input) 60))
-  (is (= (solve2) 299)))
+  (is (= (solve2 input) 299)))
 
 (comment
-  (quick-bench (solve1))
-  (quick-bench (solve1')))
+  (quick-bench (solve1 input))
+  (quick-bench (solve1' input)))

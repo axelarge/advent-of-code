@@ -8,17 +8,11 @@
   (= (count (distinct (map f phrase)))
      (count phrase)))
 
-(defn solve
-  ([f]
-   (solve f input))
-  ([f input]
-   (->> input
-        tokenize-lines
-        (filter (partial no-dupes-by f))
-        count)))
+(defn solve [f input]
+  (->> input
+       tokenize-lines
+       (filter (partial no-dupes-by f))
+       count))
 
-(def solve1
-  (partial solve identity))
-
-(def solve2
-  (partial solve sort))
+(def solve1 (partial solve identity))
+(def solve2 (partial solve sort))

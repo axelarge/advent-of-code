@@ -7,7 +7,7 @@
   (is (= (solve1 "1111") 4))
   (is (= (solve1 "1234") 0))
   (is (= (solve1 "91212129") 9))
-  (is (= (solve1) 1343)))
+  (is (= (solve1 input) 1343)))
 
 (deftest test-solve2
   (is (= (solve2 "1212") 6))
@@ -15,4 +15,4 @@
   (is (= (solve2 "123425") 4))
   (is (= (solve2 "123123") 12))
   (is (= (solve2 "12131415") 4))
-  (is (= (solve2) 1274)))
+  (is (= (solve2 input) 1274)))

@@ -6,16 +6,16 @@
 
 (deftest test-solve1
   (is (= (solve1 test-input) 5))
-  (is (= (solve1) 4074)))
+  (is (= (solve1 input) 4074)))
 
 (deftest test-solve2
   (is (= (solve2 test-input) 4))
-  (is (= (solve2) 2793)))
+  (is (= (solve2 input) 2793)))
 
 (deftest test-solve1'
   (is (= (solve1' test-input) 5))
-  (is (= (solve1') 4074)))
+  (is (= (solve1' input) 4074)))
 
 (deftest test-solve2'
   (is (= (solve2' test-input) 4))
-  (is (= (solve2') 2793)))
+  (is (= (solve2' input) 2793)))

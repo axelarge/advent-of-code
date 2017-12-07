@@ -17,13 +17,11 @@
         (recur (inc n) i maze)
         n))))
 
-(defn solve
-  ([f] (solve f input))
-  ([f input]
-   (->> input
-        str/split-lines
-        (mapv parse-int)
-        (steps f))))
+(defn solve [f input]
+  (->> input
+       str/split-lines
+       (mapv parse-int)
+       (steps f)))
 
 (def solve1 (partial solve inc))
 (def solve2 (partial solve (fn [x] (if (< x 3) (inc x) (dec x)))))

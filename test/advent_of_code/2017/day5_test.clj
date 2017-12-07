@@ -6,8 +6,8 @@
 
 (deftest test-solve1
   (is (= (solve1 test-input) 5))
-  (is (= (solve1) 376976)))
+  (is (= (solve1 input) 376976)))
 
 (deftest test-solve2
   (is (= (solve2 test-input) 10))
-  (is (= (solve2) 29227751)))
+  (is (= (solve2 input) 29227751)))

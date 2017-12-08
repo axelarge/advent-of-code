@@ -31,11 +31,8 @@
 (defn find-button [keypad start steps]
   (reduce (partial move-in keypad) start steps))
 
-(defn scan [f val coll]
-  (reduce #(conj %1 (f (last %1) %2)) [val] coll))
-
 (defn find-buttons [keypad step-lines]
-  (drop 1 (scan (partial find-button keypad) "5" step-lines)))
+  (scan (partial find-button keypad) "5" step-lines))
 
 (defn make-pad [pad]
   (->> pad

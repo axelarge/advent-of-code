@@ -45,15 +45,6 @@
         (map (juxt kf vf))
         (into {}))))
 
-(defn scan
-  ([f xs]
-   (scan f (f) xs))
-  ([f val xs]
-   (lazy-seq
-     (when-some [xs (seq xs)]
-       (let [r (f val (first xs))]
-         (cons r (scan f r (rest xs))))))))
-
 (defmacro catch-ex-data [& body]
   `(try
      ~@body

@@ -32,7 +32,7 @@
   (reduce (partial move-in keypad) start steps))
 
 (defn find-buttons [keypad step-lines]
-  (scan (partial find-button keypad) "5" step-lines))
+  (drop 1 (reductions (partial find-button keypad) "5" step-lines)))
 
 (defn make-pad [pad]
   (->> pad

@@ -5,58 +5,53 @@
 
 (def special (set "{<!>}"))
 
-(defn handle-! [chars state]
-  [(rest chars) state])
+(defmulti step (fn [{:keys [chars stream]}] (chars (first stream))))
 
-(defn collecting-garbage? [state]
-  (= \< (peek (:stack state))))
+(defmethod step \! [state]
+  (update state :stream #(drop 2 %)))
 
-(defn handle-group-open [chars state]
-  (if (collecting-garbage? state)
-    [chars (update state :garbage inc)]
-    [chars (-> state
-               (update :stack conj \{)
-               (update :level inc))]))
+(defmethod step \{ [state]
+  (-> state
+      (update :stream rest)
+      (update :stack conj \{)
+      (update :level inc)))
 
-(defn handle-group-close [chars state]
-  (if (collecting-garbage? state)
-    [chars (update state :garbage inc)]
-    [chars (-> state
-               (update :stack pop)
-               (update :groups inc)
-               (update :score + (:level state))
-               (update :level dec))]))
+(defmethod step \} [state]
+  (-> state
+      (update :stream rest)
+      (update :stack pop)
+      (update :groups inc)
+      (update :score + (:level state))
+      (update :level dec)))
 
-(defn handle-< [chars state]
-  (if (collecting-garbage? state)
-    [chars (update state :garbage inc)]
-    [chars (-> state
-               (update :stack conj \<))]))
+(defmethod step \< [state]
+  (-> state
+      (update :stream rest)
+      (update :stack conj \<)
+      (assoc :chars (set "!>"))))
 
-(defn handle-> [chars state]
-  [chars (-> state
-             (update :stack pop))])
+(defmethod step \> [state]
+  (-> state
+      (update :stream rest)
+      (update :stack pop)
+      (assoc :chars special)))
 
-(defn handle-rest [chars state]
-  (let [[chunk chars] (split-with (complement special) chars)]
-    [chars (cond-> state
-             (collecting-garbage? state) (update :garbage + (count chunk)))]))
+(defmethod step :default [{:keys [stream chars stack] :as state}]
+  (let [[chunk stream] (split-with (complement chars) stream)]
+    (cond-> (assoc state :stream stream)
+      (= \< (peek stack)) (update :garbage + (count chunk)))))
 
-(defn solve [chars]
-  (loop [[[ch & tail :as chars] state]
-         [chars {:level   0
-                 :score   0
-                 :groups  0
-                 :stack   []
-                 :garbage 0}]]
-    (case ch
-      nil state
-      \! (recur (handle-! tail state))
-      \> (recur (handle-> tail state))
-      \< (recur (handle-< tail state))
-      \{ (recur (handle-group-open tail state))
-      \} (recur (handle-group-close tail state))
-      (recur (handle-rest chars state)))))
+(defn solve [stream]
+  (loop [{:keys [stream] :as state} {:stream  stream
+                                     :level   0
+                                     :score   0
+                                     :groups  0
+                                     :stack   []
+                                     :garbage 0
+                                     :chars   special}]
+    (if (first stream)
+      (recur (step state))
+      state)))
 
 (def solve1 (comp :score solve))
 (def solve2 (comp :garbage solve))

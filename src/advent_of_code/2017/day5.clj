@@ -7,11 +7,11 @@
 (defn steps [f maze]
   (loop [n 0
          i 0
-         maze maze]
+         maze (transient maze)]
     (if-let [v (get maze i)]
       (recur (inc n)
              (+ i v)
-             (assoc maze i (f v)))
+             (assoc! maze i (f v)))
       n)))
 
 (defn solve [f input]

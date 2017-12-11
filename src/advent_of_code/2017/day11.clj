@@ -14,7 +14,7 @@
 
 (defn distance [[a b]]
   (->> [a b (- 0 a b)]
-       (map #(Math/abs %))
+       (mapv abs)
        (apply max)))
 
 (defn solve [input]

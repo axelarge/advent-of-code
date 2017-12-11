@@ -35,7 +35,7 @@
 
 (defn distance [start steps]
   (let [[_ x y] (travel start steps)]
-    (+ (Math/abs x) (Math/abs y))))
+    (+ (abs x) (abs y))))
 
 (defn solve1 [input]
   (distance [:N 0 0] (parse-steps input)))

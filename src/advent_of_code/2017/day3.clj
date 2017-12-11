@@ -1,5 +1,6 @@
 (ns advent-of-code.2017.day3
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [advent-of-code.support :refer :all]))
 
 (def input 325489)
 
@@ -27,7 +28,7 @@
       (-> (nth-in-ring n)
           (rem (dec (ring-width r)))
           (- r)
-          Math/abs))))
+          abs))))
 
 (defn distance [n]
   (+ (ring n)

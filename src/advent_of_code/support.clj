@@ -11,6 +11,9 @@
 (defn parse-int [s]
   (Integer/parseInt s))
 
+(defn abs [x]
+  (if (pos? x) x (- x)))
+
 (defn splitter [r]
   #(str/split % r))
 

@@ -23,9 +23,9 @@
 
 (defn solve2 [input]
   (loop [refs (parse input)
-         groups []]
+         groups 0]
     (if-let [from (ffirst refs)]
       (let [group (get-group refs from #{from})]
         (recur (reduce dissoc refs group)
-               (conj groups group)))
-      (count groups))))
+               (inc groups)))
+      groups)))

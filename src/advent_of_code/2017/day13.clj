@@ -27,4 +27,4 @@
   (let [parsed (parse input)]
     (find-where (fn [delay]
                   (not-any? #(severity delay %) parsed))
-                (range))))
+                (next (range)))))

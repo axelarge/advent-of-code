@@ -28,6 +28,11 @@
                    #(keep not-empty %)
                    split-whitespace)))))
 
+(defn left-pad [s len pad]
+  (str
+    (apply str (take (- len (count s)) (cycle pad)))
+    s))
+
 (defn transpose [m]
   (vec (apply map vector m)))
 
@@ -47,6 +52,36 @@
    (->> coll
         (map (juxt kf vf))
         (into {}))))
+
+(defn connected-nodes
+  ([neighbors from] (connected-nodes neighbors from #{}))
+  ([neighbors from seen]
+   (when-not (seen from)
+     (reduce (fn [seen child]
+               (into seen (connected-nodes neighbors child seen)))
+             (conj seen from)
+             (neighbors from)))))
+
+(defn connected-nodes-fast
+  ([neighbors from]
+   (persistent!
+     (connected-nodes-fast neighbors from (transient #{}))))
+  ([neighbors from seen]
+   (if (seen from)
+     seen
+     (reduce (fn [seen child]
+               (connected-nodes-fast neighbors child seen))
+             (conj! seen from)
+             (neighbors from)))))
+
+(defn group-count [nodes neighbors]
+  (first
+    (reduce (fn [[count visited] c]
+              (if (visited c)
+                [count visited]
+                [(inc count) (into visited (neighbors c))]))
+            [0 #{}]
+            nodes)))
 
 (defmacro catch-ex-data [& body]
   `(try

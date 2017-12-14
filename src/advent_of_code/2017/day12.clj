@@ -13,19 +13,10 @@
        str/split-lines
        (into {} (map parse-line))))
 
-(defn get-group [refs from seen]
-  (let [to (remove seen (get refs from))
-        seen (into seen to)]
-    (into seen (mapcat #(get-group refs % seen) to))))
-
 (defn solve1 [input]
-  (-> input parse (get-group 0 #{0}) count))
+  (-> input parse (connected-nodes 0) count))
 
 (defn solve2 [input]
-  (loop [refs (parse input)
-         groups 0]
-    (if-let [from (ffirst refs)]
-      (let [group (get-group refs from #{from})]
-        (recur (reduce dissoc refs group)
-               (inc groups)))
-      groups)))
+  (let [refs (parse input)]
+    (group-count (keys refs)
+                 (partial connected-nodes refs))))

@@ -13,25 +13,18 @@
        str/split-lines
        (map parse-line)))
 
-(defn position [[t n]]
-  (mod t (* 2 (dec n))))
-
-(defn severity [[t n]]
-  (* t n))
-
-(defn offset [parsed delay]
-  (map (fn [[t n]] [(+ t delay) n]) parsed))
+(defn severity [delay [t n]]
+  (when (zero? (mod (+ t delay)
+                    (* 2 (dec n))))
+    (* t n)))
 
 (defn total-severity [parsed]
-  (->> parsed
-       (filter (comp zero? position))
-       (map severity)
-       (apply +)))
+  (apply + (keep (partial severity 0) parsed)))
 
 (def solve1 (comp total-severity parse))
 
 (defn solve2 [input]
   (let [parsed (parse input)]
-    (->> (range)
-         (filter (comp zero? total-severity (partial offset parsed)))
-         first)))
+    (find-where (fn [delay]
+                  (not-any? #(severity delay %) parsed))
+                (range))))

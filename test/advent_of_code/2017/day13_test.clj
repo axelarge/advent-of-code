@@ -8,4 +8,4 @@
 
 (deftest test-solve2
   (is (= (solve2 test-input) 10))
-  #_(is (= (solve2 input) 3840052)))
+  (is (= (solve2 input) 3840052)))

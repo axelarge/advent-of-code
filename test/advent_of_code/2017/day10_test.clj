@@ -18,4 +18,6 @@
   (is (= (solve2 "1,2,3")
          "3efbe78a8d82f29979031a4aa0b16a9d"))
   (is (= (solve2 "1,2,4")
-         "63960835bcdc130f0b66d7ff4f6a5a8e")))
+         "63960835bcdc130f0b66d7ff4f6a5a8e"))
+  (is (= (solve2 input)
+         "2da93395f1a6bb3472203252e3b17fe5")))

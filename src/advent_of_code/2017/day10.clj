@@ -13,28 +13,18 @@
       (concat [17 31 73 47 23])
       vec))
 
-(defn advance [n ls]
-  (->> (cycle ls)
-       (drop n)
-       (take (count ls))
-       vec))
-
 (defn take-step [[ls offset skip] n]
-  [(->> (concat (reverse (take n ls))
-                (drop n ls))
-        (advance (+ n skip)))
-   (+ skip offset n)
-   (inc skip)])
-
-(defn reset-to-front [ls skip]
-  (let [size (count ls)]
-    (advance (- size (mod skip size)) ls)))
+  (let [is (->> (range offset (+ offset n))
+                (map #(mod % (count ls))))]
+    [(reduce-kv assoc ls (zipmap is (map ls (reverse is))))
+     (+ offset n skip)
+     (inc skip)]))
 
 (defn take-steps [size times steps]
-  (let [[ls skip n] (-> (iterate #(reduce take-step % steps)
-                                 [(range size) 0 0])
-                        (nth times))]
-    (reset-to-front ls skip)))
+  (-> (iterate #(reduce take-step % steps)
+               [(vec (range size)) 0 0])
+      (nth times)
+      first))
 
 (defn condense [ints]
   (->> ints

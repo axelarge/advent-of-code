@@ -8,7 +8,7 @@
 (def input [703 516])
 
 (defn stream [^long start ^long mul ^long div-by]
-  (->> (iterate (fn [^long x] (-> x (* mul) (mod 2147483647)))
+  (->> (iterate (fn [^long x] (-> x (* mul) (rem 2147483647)))
                 start)
        rest
        (filter (fn [^long x] (zero? (rem x div-by))))))

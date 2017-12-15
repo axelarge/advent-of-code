@@ -1,6 +1,5 @@
 (ns advent-of-code.2017.day15
-  (:require [advent-of-code.support :refer :all]
-            [clojure.string :as str]))
+  (:require [advent-of-code.support :refer :all]))
 
 (set! *unchecked-math* :warn-on-boxed)
 (set! *warn-on-reflection* true)

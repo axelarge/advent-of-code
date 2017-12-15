@@ -11,8 +11,7 @@
 (defn solve [f input]
   (->> input
        tokenize-lines
-       (filter (partial no-dupes-by f))
-       count))
+       (count-where (partial no-dupes-by f))))
 
 (def solve1 (partial solve identity))
 (def solve2 (partial solve sort))

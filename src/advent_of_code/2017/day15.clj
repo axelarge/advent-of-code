@@ -24,8 +24,7 @@
   (->> (mapv stream input [16807 48271] divs)
        (apply map vector)
        (take limit)
-       (filter match?)
-       count))
+       (count-where match?)))
 
 (def solve1 (partial solve [1 1] 40000000))
 (def solve2 (partial solve [4 8] 5000000))

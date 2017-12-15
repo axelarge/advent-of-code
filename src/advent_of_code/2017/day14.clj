@@ -19,7 +19,7 @@
 
 (defn cardinality [m]
   (->> m
-       (map (comp count (partial filter #{\1})))
+       (map (partial count-where #{\1}))
        (apply +)))
 
 (defn neighbors [m [x0 y0]]

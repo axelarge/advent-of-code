@@ -40,10 +40,19 @@
   (map (partial map f) coll))
 
 (defn find-where [pred coll]
-  (some #(when (pred %) %) coll))
+  (reduce (fn [_ x] (when (pred x) (reduced x)))
+          nil
+          coll))
 
 (defn index-where [pred coll]
-  (first (keep-indexed (fn [idx x] (when (pred x) idx)) coll)))
+  (reduce-kv (fn [_ k v] (when (pred v) (reduced k)))
+             nil
+             coll))
+
+(defn count-where [pred coll]
+  (reduce (fn [c x] (if (pred x) (inc c) c))
+          0
+          coll))
 
 (defn index-by
   ([kf coll]

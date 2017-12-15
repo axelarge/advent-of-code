@@ -14,7 +14,8 @@
 
 (defn bitmap [input]
   (->> (range 128)
-       (mapv (comp to-bit-string #(knot-hash input %)))))
+       (pmap (comp to-bit-string #(knot-hash input %)))
+       vec))
 
 (defn cardinality [m]
   (->> m

@@ -45,9 +45,15 @@
           coll))
 
 (defn index-where [pred coll]
-  (reduce-kv (fn [_ k v] (when (pred v) (reduced k)))
-             nil
-             coll))
+  (if (associative? coll)
+    (reduce-kv (fn [_ k v] (when (pred v) (reduced k)))
+               nil
+               coll)
+    (loop [idx 0 coll (seq coll)]
+      (when coll
+        (if (pred (first coll))
+          idx
+          (recur (inc idx) (next coll)))))))
 
 (defn count-where [pred coll]
   (reduce (fn [c x] (if (pred x) (inc c) c))

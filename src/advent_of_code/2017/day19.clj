@@ -35,8 +35,8 @@
   (->> (directions dir)
        (keep (fn [dir]
                (let [pos (move pos dir)]
-                 (when-some [x (valid-pos maze pos)]
-                   [pos dir x]))))
+                 (when-some [ch (valid-pos maze pos)]
+                   [pos dir ch]))))
        first))
 
 (defn solve [maze]
@@ -44,8 +44,8 @@
          dir [1 0]
          letters []
          i 0]
-    (if-let [[pos dir x] (step maze pos dir)]
-      (recur pos dir (cond-> letters (is-letter? x) (conj x)) (inc i))
+    (if-let [[pos dir ch] (step maze pos dir)]
+      (recur pos dir (cond-> letters (is-letter? ch) (conj ch)) (inc i))
       {:pos pos :dir dir :letters (apply str letters) :steps i})))
 
 (def solve1 (comp :letters solve parse))

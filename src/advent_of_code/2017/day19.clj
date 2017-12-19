@@ -25,8 +25,8 @@
   (mapv + pos dir))
 
 (defn valid-pos [maze pos]
-  (when-some [x (get-in maze pos)]
-    (when (not= x \space) x)))
+  (when-some [ch (get-in maze pos)]
+    (when (not= ch \space) ch)))
 
 (defn directions [[y x]]
   [[y x] [x y] [(- x) (- y)]])

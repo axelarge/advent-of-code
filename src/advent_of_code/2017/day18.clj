@@ -43,12 +43,12 @@
    :mod (make-op rem)
    :snd (fn [state reg]
           (-> state
-              (update :sounds conj (resolve-param state reg))
+              (assoc :last-sound (resolve-param state reg))
               (update :idx inc)))
    :rcv (fn [state reg]
           (if (zero? (resolve-param state reg))
             (update state :idx inc)
-            (assoc state :result (last (:sounds state)))))
+            (assoc state :out (:last-sound state))))
    :jgz (fn [state reg offset]
           (update state :idx + (if (pos? (resolve-param state reg))
                                  (resolve-param state offset)
@@ -89,10 +89,10 @@
 ;;; Interpreting
 
 (defn interpret [instructions]
-  (loop [state {:regs {} :idx 0 :sounds []}]
+  (loop [state {:regs {} :idx 0}]
     (let [[command args] (get instructions (:idx state))
           state (apply (get ops command) state args)]
-      (if (:result state)
+      (if (:out state)
         state
         (recur state)))))
 
@@ -126,5 +126,5 @@
       states
       (recur (step-both instructions states)))))
 
-(def solve1 (comp :result interpret parse))
+(def solve1 (comp :out interpret parse))
 (def solve2 (comp :sent second interpret2 parse))

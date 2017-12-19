@@ -13,6 +13,14 @@
        "jgz a -1\n"
        "set a 1\n"
        "jgz a -2"))
+(def test-input2
+  (str "snd 1\n"
+       "snd 2\n"
+       "snd p\n"
+       "rcv a\n"
+       "rcv b\n"
+       "rcv c\n"
+       "rcv d"))
 (def input (get-input 2017 18))
 
 ;;; Commands
@@ -43,8 +51,23 @@
             (assoc state :result (last (:sounds state)))))
    :jgz (fn [state reg offset]
           (update state :idx + (if (pos? (resolve-param state reg))
-                                 offset
+                                 (resolve-param state offset)
                                  1)))})
+
+(def ops2
+  (assoc ops
+    :snd (fn [state reg]
+           (-> state
+               (assoc :out (resolve-param state reg))
+               (update :sent inc)
+               (update :idx inc)))
+    :rcv (fn [state reg]
+           (if-let [x (first (:queue state))]
+             (-> state
+                 (assoc-in [:regs reg] x)
+                 (update :queue subvec 1)
+                 (update :idx inc))
+             (assoc state :status :waiting)))))
 
 ;;; Parsing
 
@@ -55,7 +78,7 @@
 
 (defn parse-line [line]
   (let [[command & params] (str/split line #"\s+")]
-    [(get ops (keyword command))
+    [(keyword command)
      (mapv parse-param params)]))
 
 (defn parse [input]
@@ -68,9 +91,40 @@
 (defn interpret [instructions]
   (loop [state {:regs {} :idx 0 :sounds []}]
     (let [[command args] (get instructions (:idx state))
-          state (apply command state args)]
+          state (apply (get ops command) state args)]
       (if (:result state)
         state
         (recur state)))))
 
+;;; Part 2
+
+(defn step [instructions {:keys [idx status queue] :as state}]
+  (if (or (= :done status)
+          (and (= :waiting status)
+               (empty? queue)))
+    state
+    (if-let [[command args] (get instructions idx)]
+      (apply (get ops2 command) (assoc state :status :running) args)
+      (assoc state :status :done))))
+
+(defn transfer [from to]
+  (if-let [x (:out from)]
+    (update to :queue conj x)
+    to))
+
+(defn step-both [instructions [state0 state1]]
+  (let [state0 (step instructions state0)
+        state1 (step instructions (transfer state0 state1))
+        state0 (transfer state1 state0)]
+    [(dissoc state0 :out)
+     (dissoc state1 :out)]))
+
+(defn interpret2 [instructions]
+  (loop [states [{:regs {:p 0} :queue [] :idx 0 :status :running :sent 0}
+                 {:regs {:p 1} :queue [] :idx 0 :status :running :sent 0}]]
+    (if (every? (comp #{:waiting :done} :status) states)
+      states
+      (recur (step-both instructions states)))))
+
 (def solve1 (comp :result interpret parse))
+(def solve2 (comp :sent second interpret2 parse))

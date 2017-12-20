@@ -3,7 +3,7 @@
             [clojure.string :as str]))
 
 (defn- res [year day]
-  (io/resource (str "inputs/" year "/day" day ".txt")))
+  (io/resource (format "inputs/%d/day%02d.txt" year day)))
 
 (defn get-input [year day]
   (slurp (res year day)))

@@ -1,0 +1,34 @@
+if (part1) {
+    b = 81
+    c = 81  // const
+} else {
+    b = 108100
+    c = 125100  // const
+}
+
+int isPrime (b) {
+    local f = true
+    local d = 2
+    do {
+        local e = 2
+        do {
+            if (d * e == b) {
+                f = false
+            }
+            e++
+        } while (e != b)
+        d++
+    } while (d != b)
+
+    return f
+}
+
+while (true) {
+    if (!isPrime(b)) {
+        h++
+    }
+    if (b == c) {
+        return h
+    }
+    b += 17
+}

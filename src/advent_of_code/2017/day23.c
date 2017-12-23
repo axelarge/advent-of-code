@@ -9,7 +9,7 @@ int isPrime (b) {
     //     }
     // }
     // return 1;
-    for (int i = 2; i * i < b; i++) {
+    for (int i = 2; i * i <= b; i++) {
         if (b % i == 0) return 0;
     }
     return 1;

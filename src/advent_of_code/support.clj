@@ -103,3 +103,7 @@
      ~@body
      (catch Exception e#
        (ex-data e#))))
+
+(defn prime? [n]
+  (->> (range 2 (inc (int (Math/ceil (Math/sqrt n)))))
+       (not-any? #(zero? (rem n %)))))

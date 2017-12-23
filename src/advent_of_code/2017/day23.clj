@@ -20,3 +20,8 @@
       (if-let [[command args] (get instructions (:idx state))]
         (recur (apply (get ops command) state args))
         (:mul-count state)))))
+
+(defn solve2 []
+  (->> (range 108100 (inc 125100) 17)
+       (remove prime?)
+       count))

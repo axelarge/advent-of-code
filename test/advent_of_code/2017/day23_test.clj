@@ -4,3 +4,6 @@
 
 (deftest test-solve1
   (is (= (solve1 input) 6241)))
+
+(deftest test-solve2
+  (is (= (solve2) 909)))

@@ -32,5 +32,5 @@
 (defn solve2 [input]
   (->> (transpose [(char-range \a \z)
                    (char-range \A \Z)])
-       (map #(solve1 (remove (set %) input)))
+       (pmap #(solve1 (remove (set %) input)))
        (apply min)))

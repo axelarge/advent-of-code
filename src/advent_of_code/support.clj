@@ -68,6 +68,18 @@
         (map (juxt kf vf))
         (into {}))))
 
+(defn partition-all-by [pred coll]
+  (let [[gs g] (reduce (fn [[gs g] x]
+                         (if (pred x)
+                           [(if (= [] g)
+                              gs
+                              (conj gs g))
+                            [x]]
+                           [gs (conj g x)]))
+                       [[] []]
+                       coll)]
+    (conj gs g)))
+
 (defn connected-nodes
   ([neighbors from] (connected-nodes neighbors from #{}))
   ([neighbors from seen]

@@ -42,6 +42,36 @@
         (update :path conj node)
         (update :seen conj node))))
 
+(defn make-work [extra node]
+  [node (+ (- (int node) 64) extra)])
+
+(defn forward-time [{:keys [workers elapsed] :as state}]
+  (let [t (some->> workers
+                   (keep second)
+                   not-empty
+                   (apply min))]
+    (if-not t
+      state
+      (let [done (->> workers
+                      (filter #(= t (second %)))
+                      (map first))]
+        (-> state
+            (update :seen into done)
+            (update :path into done)
+            (update :elapsed + t)
+            (assoc :workers (->> workers
+                                 (mapv (fn [[n r]]
+                                         (when (and n (not= r t))
+                                           [n (- r t)]))))))))))
+
+(defn step2 [make-work {:keys [workers] :as state}]
+  (if-let [node (next-node (update state :req #(remove (comp (set (keep first workers)) first) %)))]
+    (if-let [free-worker (index-where nil? workers)]
+      (assoc-in state [:workers free-worker] (make-work node))
+      (forward-time state))
+    (when (some some? workers)
+      (forward-time state))))
+
 (defn solve1 [input]
   (->> {:req (parse input)
         :path []
@@ -52,5 +82,16 @@
        :path
        (apply str)))
 
-(defn solve2 [input]
-  (->> input))
+(defn solve2
+  ([input]
+   (solve2 input 5 60))
+  ([input n e]
+   (->> {:req (parse input)
+         :workers (vec (repeat n nil))
+         :elapsed 0
+         :path []
+         :seen #{}}
+        (iterate (partial step2 (partial make-work e)))
+        (take-while some?)
+        last
+        :elapsed)))

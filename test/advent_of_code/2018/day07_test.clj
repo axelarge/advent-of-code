@@ -7,5 +7,5 @@
   (is (= (solve1 input) "FMOXCDGJRAUIHKNYZTESWLPBQV")))
 
 (deftest test-solve2
-  (is (= (solve2 test-input)))
-  (is (= (solve2 input))))
+  (is (= (solve2 test-input 2 0) 15))
+  (is (= (solve2 input) 1053)))

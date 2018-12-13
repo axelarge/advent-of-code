@@ -110,6 +110,9 @@
             [0 #{}]
             nodes)))
 
+(defn throw-ex-data [data]
+  (throw (ex-info "" data)))
+
 (defmacro catch-ex-data [& body]
   `(try
      ~@body

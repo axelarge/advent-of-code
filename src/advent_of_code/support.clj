@@ -2,11 +2,11 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
-(defn- res [year day]
-  (io/resource (format "inputs/%d/day%02d.txt" year day)))
+(defn- res [year day suffix]
+  (io/resource (format "inputs/%d/day%02d%s.txt" year day (str/join "-" (cons "" suffix)))))
 
-(defn get-input [year day]
-  (slurp (res year day)))
+(defn get-input [year day & suffix]
+  (slurp (res year day suffix)))
 
 (defn parse-int [s]
   (Integer/parseInt s))

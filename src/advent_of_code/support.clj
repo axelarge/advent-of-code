@@ -71,6 +71,16 @@
         (map (juxt kf vf))
         (into {}))))
 
+(defn group-map [kf vf init coll]
+  (persistent!
+    (reduce
+      (fn [ret x]
+        (let [k (kf x)
+              v (vf x)]
+          (assoc! ret k (conj (get ret k init) v))))
+      (transient {})
+      coll)))
+
 (defn partition-all-by [pred coll]
   (let [[gs g] (reduce (fn [[gs g] x]
                          (if (pred x)

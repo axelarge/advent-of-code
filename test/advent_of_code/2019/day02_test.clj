@@ -1,6 +1,7 @@
 (ns advent-of-code.2019.day02-test
   (:require [clojure.test :refer :all]
-            [advent-of-code.2019.day02 :refer :all]))
+            [advent-of-code.2019.day02 :refer :all]
+            [advent-of-code.2019.intcode :refer [parse]]))
 
 (deftest test-solve1
   (is (= (solve (parse "1,9,10,3,2,3,11,0,99,30,40,50"))

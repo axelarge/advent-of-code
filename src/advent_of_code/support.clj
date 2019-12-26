@@ -11,6 +11,9 @@
 (defn parse-int [s]
   (Integer/parseInt s))
 
+(defn parse-char-int [c]
+  (- (int c) 48))
+
 (defn abs [x]
   (if (pos? x) x (- x)))
 

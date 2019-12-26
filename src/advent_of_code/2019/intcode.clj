@@ -5,6 +5,7 @@
 (defn make-state [mem]
   {:mem mem
    :pos 0
+   :input []
    :output []})
 
 (defn parse [input]
@@ -15,6 +16,9 @@
 
 (defn set-input [state input]
   (assoc state :input input))
+
+(defn append-input [state & inputs]
+  (apply update state :input conj inputs))
 
 (defn parse-opcode [code]
   {:opcode (rem code 100)
@@ -63,7 +67,7 @@
         (update :pos + 4))))
 
 (defmethod step' 3 #_input [{:keys [input] :as state} _ modes]
-  (assert (some? input))
+  (assert (some? (first input)))
   (let [[addr] (params state modes 1 0)]
     (when (:debug state)
       (println ":" 3 addr))
@@ -122,7 +126,16 @@
   (let [{:keys [opcode modes]} (parse-opcode (get mem pos))]
     (step' state opcode modes)))
 
-(defn result [state]
+(defn- run [state]
   (->> (iterate step state)
-       #_(take 1000)
+       #_(take 1000)))
+
+(defn result [state]
+  (->> (run state)
        (find-where :halt?)))
+
+(defn await-output [state]
+  (let [output (:output state)]
+    (->> (run state)
+         (find-where #(or (:halt? %)
+                          (not= output (:output %)))))))

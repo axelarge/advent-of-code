@@ -1,6 +1,7 @@
 (ns advent-of-code.2019.intcode-test
   (:require [clojure.test :refer :all]
-            [advent-of-code.2019.intcode :refer :all]))
+            [advent-of-code.2019.intcode :refer :all]
+            [clojure.string :as str]))
 
 (def eq-8-pos "3,9,8,9,10,9,4,9,99,-1,8")
 (def eq-8-imm "3,3,1108,-1,8,3,4,3,99")
@@ -18,8 +19,9 @@
       (result)
       :output))
 
-(deftest test-intcode
-  (is (= (:mem (step (parse-state "1002,4,3,4,33"))) [1002, 4, 3, 4, 99]))
+(deftest test-intcode-day5
+  (is (= (:mem (step (parse-state "1002,4,3,4,33")))
+         (mem-to-map [1002, 4, 3, 4, 99])))
   (is (= (run-test eq-8-pos [8]) [1]))
   (is (= (run-test eq-8-pos [9]) [0]))
   (is (= (run-test eq-8-imm [8]) [1]))
@@ -37,3 +39,12 @@
   (is (= (run-test large [7]) [999]))
   (is (= (run-test large [8]) [1000]))
   (is (= (run-test large [9]) [1001])))
+
+(deftest test-intcode-day9
+  (is (= (str/join "," (run-test "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99" []))
+         "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99"))
+  (is (= (count (str (first (run-test "1102,34915192,34915192,7,4,7,99,0" []))))
+         16))
+  (is (= (str (first (run-test "104,1125899906842624,99" [])))
+         "1125899906842624")))
+

@@ -4,9 +4,6 @@
 (def test-input 3)
 (def input 363)
 
-(defn insert-at [xs i x]
-  (vec (concat (subvec xs 0 i) [x] (subvec xs i))))
-
 (defn fill [n step]
   (first
     (reduce (fn [[xs i] x]

@@ -32,15 +32,26 @@
                    split-whitespace)))))
 
 (defn left-pad [s len pad]
-  (str
-    (apply str (take (- len (count s)) (cycle pad)))
-    s))
+  (let [s (str s)]
+    (str
+      (apply str (take (- len (count s)) (cycle pad)))
+      s)))
+
+(defn remove-at [xs i]
+  (into (subvec xs 0 i) (subvec xs (inc i))))
+
+(defn insert-at [xs i x]
+  (vec (concat (subvec xs 0 i) [x] (subvec xs i))))
 
 (defn transpose [m]
   (vec (apply map vector m)))
 
 (defn map2 [f coll]
   (map (partial map f) coll))
+
+(defn indexed [coll]
+  (some->> coll
+           (map-indexed (fn [i x] [i x]))))
 
 (defn find-where [pred coll]
   (reduce (fn [_ x] (when (pred x) (reduced x)))

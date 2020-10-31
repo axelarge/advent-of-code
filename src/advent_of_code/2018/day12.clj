@@ -30,7 +30,9 @@
   (let [[init _ & rules] (str/split-lines input)]
     {:pots (subs init 15)
      :offset 0
-     :rules (set (keep parse-line rules))}))
+     :rules (set (keep parse-line rules))
+     :gen 0
+     :seen {}}))
 
 (defn pad [{:keys [pots] :as state}]
   (let [first-on (str/index-of pots \#)
@@ -47,10 +49,39 @@
                           (map #(if (rules %) \# \.))
                           (apply str ".."))))
 
+#_(defn snapshot [{:keys [pots gen seen offset] :as state}]
+    (if-let [seen-at (get seen pots)]
+      (-> state
+          (assoc :period {:gen (inc (- gen (:gen seen-at)))
+                          :offset (- offset (:offset seen-at))}))
+      (update state :seen assoc pots (select-keys state [:gen :offset]))))
+
+(defn as-int [pots]
+  (BigInteger. (apply str (map {\# 1 \. 0} pots)) 2))
+
+(defn snapshot [{:keys [pots gen seen offset] :as state}]
+  (update state :seen assoc pots (select-keys state [:gen :offset])))
+
+(defn already-seen? [{:keys [pots seen gen]}]
+  (get seen pots))
+
 (defn step [state]
   (-> state
+      snapshot
+      apply-rules
       pad
-      apply-rules))
+      (update :gen inc)))
+
+(defn step-fast [{:keys [] :as state}]
+  (if-let [prev (already-seen? state)]
+    (-> state)
+        
+
+    (-> state
+        snapshot
+        apply-rules
+        pad
+        (update :gen inc))))
 
 (defn sum [{:keys [pots offset]}]
   (->> pots
@@ -62,9 +93,26 @@
 (defn solve1 [input]
   (->> input
        parse
+       pad
        (iterate step)
        (#(nth % 20))
        sum))
 
 (defn solve2 [input]
-  (->> input))
+  (let [cyclic (->> input
+                    parse
+                    pad
+                    (iterate step)
+                    (find-where already-seen?))
+        prev (get-in cyclic [:seen (:pots cyclic)])
+        d-offset (- (:offset cyclic) (:offset prev))
+        period (- (:gen cyclic) (:gen prev))
+        d (- 50000000000)]
+    (sum ())
+    (-> cyclic
+        (assoc :prev (get-in cyclic [:seen (:pots cyclic)]))
+        (dissoc :seen))
+    {:cyclic (dissoc cyclic :seen :rules)
+     :d-offset d-offset
+     :period period}))
+    ;(dissoc period :seen)))

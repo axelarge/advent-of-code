@@ -15,12 +15,12 @@
 (defn solve1 [input]
   (let [state (-> (intcode/parse input)
                   (prep-input 12 2))]
-    (first (solve state))))
+    (get (solve state) 0)))
 
 (defn solve2 [input]
   (let [state (intcode/parse input)]
     (first (for [noun (range 0 100)
                  verb (range 0 100)
-                 :let [result (first (solve (prep-input state noun verb)))]
+                 :let [result (get (solve (prep-input state noun verb)) 0)]
                  :when (= result 19690720)]
              (+ (* 100 noun) verb)))))

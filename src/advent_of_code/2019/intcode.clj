@@ -1,15 +1,19 @@
 (ns advent-of-code.2019.intcode
   (:require [advent-of-code.support :refer :all]
-            [clojure.string :as str]))
+            [clojure.edn :as edn]))
+
+(defn mem-to-map [mem]
+  (zipmap (range) mem))
 
 (defn make-state [mem]
   {:mem mem
    :pos 0
+   :rel-base 0
    :input []
    :output []})
 
 (defn parse [input]
-  (mapv parse-int (re-seq #"-?\d+" input)))
+  (mem-to-map (mapv edn/read-string (re-seq #"-?\d+" input))))
 
 (defn parse-state [input]
   (make-state (parse input)))
@@ -30,16 +34,17 @@
 
 (defmulti step' (fn [state opcode modes] opcode))
 
-(defn params [{:keys [mem pos debug]} modes x n]
+(defn params [{:keys [mem pos debug rel-base]} modes x n]
   (when debug
-    (println "  " (subvec mem (inc pos) (+ pos 1 x))))
-  (->> (subvec mem (inc pos) (+ pos 1 x))
-       (map-indexed (fn [i param]
-                      (if (>= i n)
-                        param
+    (println "  " (for [x (range (inc pos) (+ pos 1 x))]
+                    (get mem x))))
+  (->> (range (inc pos) (+ pos 1 x))
+       (map-indexed (fn [i addr]
+                      (let [v (get mem addr)]
                         (case (get modes i 0)
-                          1 param ; immediate mode
-                          0 (get mem param))))))) ; position mode
+                          2 (get mem (+ rel-base v) 0)
+                          1 v ; immediate mode
+                          0 (if (>= i n) v (get mem v 0)))))))) ; position mode
 
 (defn param [{:keys [mem]} modes i val]
   (let [mode (get modes i 0)]
@@ -116,6 +121,14 @@
         (set-mem addr (if (= a b) 1 0))
         (update :pos + 4))))
 
+(defmethod step' 9 #_adjust-rel-base [state _ modes]
+  (let [[delta] (params state modes 1 1)]
+    (when (:debug state)
+      (println ":" 9 delta))
+    (-> state
+        (update :rel-base + delta)
+        (update :pos + 2))))
+
 (defmethod step' 99 #_halt [state _ _]
   (when (:debug state)
     (println ":" 99))
@@ -139,3 +152,22 @@
     (->> (run state)
          (find-where #(or (:halt? %)
                           (not= output (:output %)))))))
+
+(defn display [{:keys [mem pos] :as state}]
+  (let [ks (sort (keys mem))]
+    (assoc state :mem (->> (for [[k nk] (partition 2 1 [-1] ks)]
+                             (let [v (get mem k)
+                                   w (->> [k v]
+                                          (map (comp count str))
+                                          (apply max))
+                                   spacer (cond (= nk -1) ""
+                                                (= k (dec nk)) "  "
+                                                :else " ... ")]
+                               [(str (left-pad (if (= pos k) "v" "") w " ") spacer)
+                                (str (left-pad k w " ") spacer)
+                                (str (left-pad v w " ") spacer)]))
+                           (transpose)
+                           (map #(apply str %))))))
+;(map println))))
+
+

@@ -1,6 +1,7 @@
 (ns advent-of-code.support
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:import (java.security MessageDigest)))
 
 (defn- res [year day suffix]
   (io/resource (format "inputs/%d/day%02d%s.txt" year day (str/join "-" (cons "" suffix)))))
@@ -140,6 +141,11 @@
                 [(inc count) (into visited (neighbors c))]))
             [0 #{}]
             nodes)))
+
+(defn md5 [^String s]
+  (let [algorithm (MessageDigest/getInstance "MD5")
+        raw (.digest algorithm (.getBytes s))]
+    (format "%032x" (BigInteger. 1 raw))))
 
 (defn throw-ex-data [data]
   (throw (ex-info "" data)))

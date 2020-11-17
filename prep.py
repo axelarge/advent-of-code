@@ -3,12 +3,12 @@ from sys import argv
 
 assert len(argv) == 3 and all(a.isnumeric() for a in argv[1:]), f"Usage: {argv[0]} 2020 24"
 
-y = f"{int(argv[1])}"
-d = f"{int(argv[2]):02d}"
+year = int(argv[1])
+day = int(argv[2])
 
 
 def replace(s):
-    return s.replace("{YYYY}", y).replace("{DD}", d)
+    return s.format(YYYY=f"{year}", DD=f"{day:02d}", D=f"{day}")
 
 
 def copy_template(template, to_file):

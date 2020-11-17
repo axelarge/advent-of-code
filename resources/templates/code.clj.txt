@@ -2,7 +2,7 @@
   (:require [advent-of-code.support :refer :all]
             [clojure.string :as str]))
 
-(def input (get-input {YYYY} {DD}))
+(def input (get-input {YYYY} {D}))
 
 (defn parse-line [line]
   line)

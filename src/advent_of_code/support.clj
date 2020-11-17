@@ -82,6 +82,13 @@
           0
           coll))
 
+(defn mapm
+  ([vf m]
+   (persistent!
+     (reduce-kv (fn [m k v] (assoc! m k (vf v)))
+                (transient m)
+                m))))
+
 (defn index-by
   ([kf coll]
    (index-by kf identity coll))

@@ -1,0 +1,19 @@
+(ns advent-of-code.{YYYY}.day{DD}
+  (:require [advent-of-code.support :refer :all]
+            [clojure.string :as str]))
+
+(def input (get-input {YYYY} {DD}))
+
+(defn parse-line [line]
+  line)
+
+(defn parse [input]
+  (map parse-line (str/split-lines input)))
+
+(defn solve1 [input]
+  (->> input
+       (parse)))
+
+(defn solve2 [input]
+  (->> input
+       (parse)))

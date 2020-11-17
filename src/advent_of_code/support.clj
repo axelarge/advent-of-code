@@ -17,6 +17,13 @@
 (defn abs [x]
   (if (pos? x) x (- x)))
 
+(defn maximum
+  ([a] a)
+  ([a b]
+   (if (pos? (compare a b)) a b))
+  ([a b & rest]
+   (reduce maximum (maximum a b) rest)))
+
 (defn splitter [r]
   #(str/split % r))
 

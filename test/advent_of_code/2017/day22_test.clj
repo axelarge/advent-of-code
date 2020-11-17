@@ -8,9 +8,10 @@
   (is (= (:infected (solve1 test-input 10000)) 5587))
   (is (= (:infected (solve1 input 10000)) 5223)))
 
+(deftest test-solve2-sample
+  (is (= (:infected (solve2 test-input 100)) 26)))
 
-(deftest test-solve2
-  (is (= (:infected (solve2 test-input 100)) 26))
+(deftest ^:slow test-solve2
   (is (= (:infected (solve2 test-input 10000000)) 2511944))
   (is (= (:infected (solve2 input 10000000)) 2511456)))
 

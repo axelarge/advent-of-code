@@ -119,6 +119,15 @@
                        coll)]
     (conj gs g)))
 
+(defn window
+  "Like (partition n 1 coll) but faster"
+  ([coll]
+   (window 2 coll))
+  ([n coll]
+   (->> (iterate rest coll)
+        (take n)
+        (apply map vector))))
+
 (defn connected-nodes
   ([neighbors from] (connected-nodes neighbors from #{}))
   ([neighbors from seen]

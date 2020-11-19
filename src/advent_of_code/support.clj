@@ -66,6 +66,20 @@
           nil
           coll))
 
+(defn str-index-of
+  ([^String s ^String match]
+   (str-index-of s match 0))
+  ([^String s ^String match ^long from-idx]
+   (let [i (.indexOf s match from-idx)]
+     (when (not= -1 i) i))))
+
+(defn str-indexes
+  ([s from]
+   (str-indexes s from 0))
+  ([s from i]
+   (when-let [i (str-index-of s from i)]
+     (cons i (lazy-seq (str-indexes s from (inc i)))))))
+
 (defn index-where [pred coll]
   (if (associative? coll)
     (reduce-kv (fn [_ k v] (when (pred v) (reduced k)))

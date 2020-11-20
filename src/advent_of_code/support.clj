@@ -142,8 +142,10 @@
         (take n)
         (apply map vector))))
 
-(defn nth-iter [n f x]
-  (nth (iterate f x) n))
+(defn nth-iter [^long n f x]
+  (if (pos? n)
+    (recur (dec n) f (f x))
+    x))
 
 (defn connected-nodes
   ([neighbors from] (connected-nodes neighbors from #{}))

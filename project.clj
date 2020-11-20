@@ -7,4 +7,6 @@
                  [org.clojure/math.combinatorics "0.1.6"]
                  [criterium "0.4.4"]]
   :resource-paths ["resources"]
-  :test-selectors {:default (complement :slow)})
+  :test-selectors {:default (complement :slow)
+                   :year (fn [{:keys [ns]} & args]
+                           (some #(clojure.string/includes? ns (str %)) args))})

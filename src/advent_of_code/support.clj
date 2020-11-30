@@ -36,19 +36,14 @@
   ([a b & rest]
    (reduce maximum (maximum a b) rest)))
 
-(defn splitter [r]
-  #(str/split % r))
-
-(def split-whitespace (splitter #"\s+"))
-
 (defn tokenize-lines
   ([input] (tokenize-lines identity input))
   ([f input]
    (->> input
         str/split-lines
-        (map (comp #(map f %)
-                   #(keep not-empty %)
-                   split-whitespace)))))
+        (map #(->> (str/split % #"\s+")
+                   (keep not-empty)
+                   (map f))))))
 
 (defn left-pad [s len pad]
   (let [s (str s)]
@@ -67,10 +62,6 @@
 
 (defn map2 [f coll]
   (map (partial map f) coll))
-
-(defn indexed [coll]
-  (some->> coll
-           (map-indexed (fn [i x] [i x]))))
 
 (defn find-where [pred coll]
   (reduce (fn [_ x] (when (pred x) (reduced x)))
@@ -189,7 +180,7 @@
             nodes)))
 
 (defn md5 [^String s]
-  (let [algorithm (MessageDigest/getInstance "MD5")
+  (let [algorithm (doto (MessageDigest/getInstance "MD5") (.reset))
         raw (.digest algorithm (.getBytes s))]
     (format "%032x" (BigInteger. 1 raw))))
 

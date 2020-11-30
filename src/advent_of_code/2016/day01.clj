@@ -26,16 +26,32 @@
     :E [heading (+ x distance) y]
     :W [heading (- x distance) y]))
 
-(defn travel [start steps]
-  (reduce (fn [[heading x y :as position] [direction distance]]
-            (let [new-heading (turn heading direction)]
-              (move position new-heading distance)))
-          start
-          steps))
+(defn step [[heading x y :as position] [direction distance]]
+  (let [new-heading (turn heading direction)]
+    (move position new-heading distance)))
 
-(defn distance [start steps]
-  (let [[_ x y] (travel start steps)]
-    (+ (abs x) (abs y))))
+(defn distance [[x y]]
+  (+ (abs x) (abs y)))
 
 (defn solve1 [input]
-  (distance [:N 0 0] (parse-steps input)))
+  (->> (parse-steps input)
+       (reduce step [:N 0 0])
+       (rest)
+       (distance)))
+
+(defn solve2 [input]
+  (->> (parse-steps input)
+       (reductions step [:N 0 0])
+       (window)
+       (mapcat (fn [[[_ x1 y1] [_ x2 y2]]]
+                 (if (= x1 x2)
+                   (for [y (xrange y1 y2)]
+                     [x1 y])
+                   (for [x (xrange x1 x2)]
+                     [x y1]))))
+       (reduce (fn [seen pos]
+                 (if (seen pos)
+                   (reduced pos)
+                   (conj seen pos)))
+               #{})
+       (distance)))

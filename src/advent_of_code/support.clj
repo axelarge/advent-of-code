@@ -21,6 +21,11 @@
 (defn parse-char-int [c]
   (- (int c) 48))
 
+(defn xrange [from to]
+  (if (>= to from)
+    (range from to)
+    (range from to -1)))
+
 (defn abs [x]
   (if (pos? x) x (- x)))
 

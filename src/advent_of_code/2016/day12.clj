@@ -15,14 +15,14 @@
 (defn arg [state x]
   (if (number? x)
     x
-    (get-in state [:r x] 0)))
+    (get state x 0)))
 
 (defn step [{:keys [i code] :as state}]
   (when-let [[cmd x y] (get code i)]
     (-> (case cmd
-          :cpy (assoc-in state [:r y] (arg state x))
-          :inc (update-in state [:r x] (fnil inc 0))
-          :dec (update-in state [:r x] (fnil dec 0))
+          :cpy (assoc state y (arg state x))
+          :inc (update state x (fnil inc 0))
+          :dec (update state x (fnil dec 0))
           :jnz (cond-> state
                        (not= 0 (arg state x))
                        (update :i + (dec (arg state y)))))
@@ -32,10 +32,10 @@
   (->> (iterate step state)
        (take-while some?)
        (last)
-       :r :a))
+       :a))
 
 (defn solve1 [input]
   (run (parse input)))
 
 (defn solve2 [input]
-  (run (assoc-in (parse input) [:r :c] 1)))
+  (run (assoc (parse input) :c 1)))

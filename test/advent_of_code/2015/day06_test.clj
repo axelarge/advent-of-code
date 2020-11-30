@@ -5,5 +5,5 @@
 (deftest ^:slow test-solve1
   (is (= (solve1 input) 377891)))
 
-(deftest test-solve2
+(deftest ^:slow test-solve2
   (is (= (solve2 input) 14110788)))

@@ -13,12 +13,11 @@
   (and (re-find #"(..).*\1" s)
        (re-find #"(.).\1" s)))
 
+(defn solve [pred input]
+  (count-where pred (str/split-lines input)))
+
 (defn solve1 [input]
-  (->> input
-       (str/split-lines)
-       (count-where nice1)))
+  (solve nice1 input))
 
 (defn solve2 [input]
-  (->> input
-       (str/split-lines)
-       (count-where nice2)))
+  (solve nice2 input))

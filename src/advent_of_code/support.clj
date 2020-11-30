@@ -12,6 +12,12 @@
 (defn parse-int [s]
   (Integer/parseInt s))
 
+(defn find-int [s]
+  (parse-int (re-find #"-?\d+" s)))
+
+(defn find-ints [s]
+  (mapv parse-int (re-seq #"-?\d+" s)))
+
 (defn parse-char-int [c]
   (- (int c) 48))
 

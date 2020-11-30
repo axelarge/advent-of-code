@@ -5,13 +5,10 @@
 (def test-input "0: 3\n1: 2\n4: 4\n6: 4")
 (def input (get-input 2017 13))
 
-(defn parse-line [line]
-  (mapv parse-int (str/split line #"[^\d]+")))
-
 (defn parse [input]
   (->> input
        str/split-lines
-       (map parse-line)))
+       (map find-ints)))
 
 (defn severity [delay [t n]]
   (when (zero? (mod (+ t delay)

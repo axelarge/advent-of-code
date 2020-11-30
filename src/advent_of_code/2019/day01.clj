@@ -5,9 +5,7 @@
 (def input (get-input 2019 1))
 
 (defn parse [input]
-  (->> input
-       str/split-lines
-       (map parse-int)))
+  (find-ints input))
 
 (defn fuel-req [mass]
   (-> mass (quot 3) (- 2)))

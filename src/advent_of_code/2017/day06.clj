@@ -29,10 +29,7 @@
         (recur banks (conj seen banks))))))
 
 (defn solve [input]
-  (->> input
-       split-whitespace
-       (mapv parse-int)
-       step-until-seen))
+  (step-until-seen (find-ints input)))
 
 (def solve1 (comp first solve))
 (def solve2 (comp first step-until-seen second solve))
@@ -49,10 +46,7 @@
                (assoc seen banks (count seen)))))))
 
 (defn solve' [input]
-  (->> input
-       split-whitespace
-       (mapv parse-int)
-       step-until-seen'))
+  (step-until-seen' (find-ints input)))
 
 (def solve1' (comp count first solve'))
 (def solve2' (comp

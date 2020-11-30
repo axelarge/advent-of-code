@@ -5,7 +5,7 @@
 (def input (get-input 2017 24))
 
 (defn parse-line [line]
-  (set (map parse-int (str/split line #"/"))))
+  (set (find-ints line)))
 
 (defn parse [input]
   (let [pieces (map parse-line (str/split-lines input))]

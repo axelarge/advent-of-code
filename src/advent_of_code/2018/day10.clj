@@ -6,8 +6,7 @@
 (def input (get-input 2018 10))
 
 (defn parse-line [line]
-  (let [[x y vx vy] (->> (re-seq #"-?\d+" line)
-                         (map parse-int))]
+  (let [[x y vx vy] (find-ints line)]
     {:x x :y y :vx vx :vy vy}))
 
 (defn bounds [points]

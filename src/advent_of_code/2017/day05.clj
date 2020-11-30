@@ -15,10 +15,7 @@
       n)))
 
 (defn solve [f input]
-  (->> input
-       str/split-lines
-       (mapv parse-int)
-       (steps f)))
+  (steps f (find-ints input)))
 
 (def solve1 (partial solve inc))
 (def solve2 (partial solve #(if (< % 3) (inc %) (dec %))))

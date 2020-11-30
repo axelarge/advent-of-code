@@ -5,7 +5,7 @@
 (def input (get-input 2015 2))
 
 (defn parse-line [line]
-  (sort (map parse-int (re-seq #"\d+" line))))
+  (sort (find-ints line)))
 
 (defn parse [input]
   (map parse-line (str/split-lines input)))

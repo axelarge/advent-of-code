@@ -7,9 +7,6 @@
 (defn parse-state [s]
   (keyword (second (re-find #"state ([A-Z])" s))))
 
-(defn find-int [s]
-  (parse-int (re-find #"\d+" s)))
-
 (defn parse-val [s]
   (= 1 (find-int s)))
 

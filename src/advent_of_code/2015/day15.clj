@@ -6,7 +6,7 @@
 (def input (get-input 2015 15))
 
 (defn parse-line [line]
-  (reverse (map parse-int (re-seq #"-?\d+" line))))
+  (reverse (find-ints line)))
 
 (defn parse [input]
   (map parse-line (str/split-lines input)))

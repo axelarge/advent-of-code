@@ -13,9 +13,7 @@
    :round 1})
 
 (defn parse [input]
-  (->> (re-seq #"\d+" input)
-       (map parse-int)
-       (apply make-state)))
+  (apply make-state (find-ints input)))
 
 (defn step [{:keys [marbles idx round players] :as state}]
   (if (zero? (rem round 23))

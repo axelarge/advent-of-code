@@ -10,9 +10,7 @@
 (def input (get-input 2018 3))
 
 (defn parse-line [line]
-  (let [[id x y w h] (->> line
-                          (re-seq #"\d+")
-                          (map parse-int))]
+  (let [[id x y w h] (find-ints line)]
     {:id id :x x :y y :w w :h h}))
 
 (defn covered [{:keys [x y w h]}]

@@ -13,7 +13,7 @@
 (def input (get-input 2017 20))
 
 (defn parse-line [i line]
-  (let [[x y z, vx vy vz, ax ay az] (map parse-int (re-seq #"-?\d+" line))]
+  (let [[x y z, vx vy vz, ax ay az] (find-ints line)]
     {:i i :p [x y z] :v [vx vy vz] :a [ax ay az]}))
 
 (defn parse [input]

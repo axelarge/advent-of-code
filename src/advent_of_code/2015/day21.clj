@@ -20,7 +20,7 @@
 (def items (parse-items raw-items))
 
 (defn parse [input]
-  (->> (map parse-int (re-seq #"\d+" input))
+  (->> (find-ints input)
        (map vector [:hp :dmg :armor])
        (into {})))
 
@@ -32,7 +32,6 @@
 (defn win? [boss player]
   (<= (hits-to-kill player boss)
       (hits-to-kill boss player)))
-
 
 (defn gear-options [{:keys [rings] :as items}]
   ;; 1 weapon

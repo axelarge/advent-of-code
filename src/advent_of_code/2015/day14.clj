@@ -7,7 +7,7 @@
 
 (defn parse-line [line]
   (let [name (re-find #"\w+" line)
-        [v t r] (map parse-int (re-seq #"\d+" line))
+        [v t r] (find-ints line)
         interval (+ t r)]
     {:name name
      :v v

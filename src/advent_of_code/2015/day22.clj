@@ -16,7 +16,7 @@
        (sort-by (comp :mana spells))))
 
 (defn parse [input]
-  (->> (map parse-int (re-seq #"\d+" input))
+  (->> (find-ints input)
        (map vector [:boss :boss-dmg])
        (into {:hp 50 :mana 500 :armor 0 :spent 0 :tick 0})))
 

@@ -5,8 +5,7 @@
 (def input (get-input 2015 17))
 
 (defn parse [input]
-  (->> (str/split-lines input)
-       (map parse-int)
+  (->> (find-ints input)
        (sort (comp - compare))))
 
 (defn combos [volume containers]

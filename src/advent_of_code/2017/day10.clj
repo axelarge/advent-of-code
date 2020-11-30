@@ -5,8 +5,7 @@
 (def input "227,169,3,166,246,201,0,47,1,255,2,254,96,3,97,144")
 
 (defn parse1 [steps]
-  (->> (str/split steps #"[^\d]+")
-       (mapv parse-int)))
+  (find-ints steps))
 
 (defn parse2 [steps]
   (-> (map int steps)

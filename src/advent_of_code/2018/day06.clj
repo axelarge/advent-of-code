@@ -12,15 +12,10 @@
 
 (def input (get-input 2018 6))
 
-(defn parse-line [line]
-  (->> line
-       (re-seq #"\d+")
-       (mapv parse-int)))
-
 (defn parse [input]
   (let [points (->> input
                     str/split-lines
-                    (map parse-line))
+                    (map find-ints))
         min-x (apply min (map first points))
         max-x (apply max (map first points))
         min-y (apply min (map second points))

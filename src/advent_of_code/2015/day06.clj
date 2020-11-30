@@ -6,7 +6,7 @@
 
 (defn parse-line [line]
   (let [action (keyword (re-find #"on|off|toggle" line))
-        [x0 y0 x1 y1] (map parse-int(re-seq #"\d+" line))]
+        [x0 y0 x1 y1] (find-ints line)]
     [action x0 y0 x1 y1]))
 
 (defn parse [input]

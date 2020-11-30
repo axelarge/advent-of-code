@@ -3,9 +3,6 @@
 
 (def input (get-input 2015 25))
 
-(defn parse [input]
-  (map parse-int (re-seq #"\d+" input)))
-
 (defn diag [row col]
   (+ row col -1))
 
@@ -29,4 +26,4 @@
   (nth-code (pos->n row col)))
 
 (defn solve1 [input]
-  (apply solve (parse input)))
+  (apply solve (find-ints input)))

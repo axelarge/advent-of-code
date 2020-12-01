@@ -31,7 +31,7 @@ copy_template("code.clj.txt", "src/advent_of_code/{YYYY}/day{DD}.clj")
 copy_template("test.clj.txt", "test/advent_of_code/{YYYY}/day{DD}_test.clj")
 
 
-r = requests.get(replace("https://adventofcode.com/{YYYY}/day/{DD}/input"), cookies=dict(session=TOKEN))
+r = requests.get(replace("https://adventofcode.com/{YYYY}/day/{D}/input"), cookies=dict(session=TOKEN))
 
 with open(replace("resources/inputs/{YYYY}/day{DD}.txt"), "w") as inp:
     inp.write(r.text)

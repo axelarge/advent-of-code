@@ -38,6 +38,9 @@
 (defn abs [x]
   (if (pos? x) x (- x)))
 
+(defn bit-count [n]
+  (.bitCount (BigInteger/valueOf n)))
+
 (defn maximum
   ([a] a)
   ([a b]

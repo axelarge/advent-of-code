@@ -5,9 +5,7 @@
 (def input (get-input 2016 6))
 
 (defn parse-lines [lines]
-  (->> (str/split-lines lines)
-       (map #(str/split % #""))
-       transpose))
+  (transpose (str/split-lines lines)))
 
 (defn find-element [f coll]
   (first (apply f second (frequencies coll))))

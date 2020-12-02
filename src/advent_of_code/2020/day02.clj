@@ -5,7 +5,7 @@
 (def input (get-input 2020 2))
 
 (defn parse-line [line]
-  (let [[x y] (mapv parse-int (re-seq #"\d+" line))
+  (let [[x y] (find-pos-ints line)
         [c pass] (re-seq #"[a-z]+" line)]
     [x y (first c) pass]))
 

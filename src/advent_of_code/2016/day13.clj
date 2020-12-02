@@ -29,35 +29,38 @@
   (for [[dx dy] [[-1 0] [1 0] [0 -1] [0 1]]]
     [(+ x dx) (+ y dy)]))
 
-(defn solve [pred n]
-  (let [queue (PriorityQueue.)]
-    (loop [pos [1 1]
-           d 1
-           visited #{}
-           path [[1 1]]]
-      (->> (neighbors pos)
-           (remove #(wall? n %))
-           (remove visited)
-           (reduce (fn [q p]
-                     (doto q (.add [d p (conj path p)])))
-                   queue))
-      (let [[d pos path] (.remove queue)]
-        (if (pred d pos)
-          [d visited path]
-          (recur pos
-                 (inc d)
-                 (conj visited pos)
-                 path))))))
+(defn explore
+  ([pred n]
+   (explore pred [1 1] n))
+  ([pred pos n]
+   (let [queue (PriorityQueue.)]
+     (loop [pos pos
+            d 1
+            visited #{}
+            path [pos]]
+       (->> (neighbors pos)
+            (remove #(wall? n %))
+            (remove visited)
+            (reduce (fn [q p]
+                      (doto q (.add [d p (conj path p)])))
+                    queue))
+       (when-let [[d pos path] (.poll queue)]
+         (if (pred d pos)
+           [d visited path]
+           (recur pos
+                  (inc d)
+                  (conj visited pos)
+                  path)))))))
 
 (defn solve1
   ([input] (solve1 input [31 39]))
   ([input target]
    (->> (find-int input)
-        (solve (fn [d pos] (= pos target)))
+        (explore (fn [d pos] (= pos target)))
         (first))))
 
 (defn solve2 [input]
   (->> (find-int input)
-       (solve (fn [d pos] (> d 50)))
+       (explore (fn [d pos] (> d 50)))
        (second)
        (count)))

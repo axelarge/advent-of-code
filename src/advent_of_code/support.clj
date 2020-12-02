@@ -9,6 +9,9 @@
 (defn get-input [year day & suffix]
   (slurp (res year day suffix)))
 
+(defn xor [a b]
+  (not= (boolean a) (boolean b)))
+
 (defn parse-int [s]
   (Integer/parseInt s))
 

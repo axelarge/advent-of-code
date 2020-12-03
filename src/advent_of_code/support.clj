@@ -1,7 +1,12 @@
 (ns advent-of-code.support
   (:require [clojure.java.io :as io]
-            [clojure.string :as str])
-  (:import (java.security MessageDigest)))
+            [clojure.string :as str]
+            [clj-http.client :as http])
+  (:import (java.security MessageDigest)
+           (java.time Instant ZoneId)
+           (java.time.format DateTimeFormatter)))
+
+(def token (slurp ".token"))
 
 (defn- res [year day suffix]
   (io/resource (format "inputs/%d/day%02d%s.txt" year day (str/join "-" (cons "" suffix)))))
@@ -208,3 +213,34 @@
 (defn prime? [n]
   (->> (range 2 (inc (int (Math/ceil (Math/sqrt n)))))
        (not-any? #(zero? (rem n %)))))
+
+
+;;; LEADERBOARD
+
+
+(defn format-leaderboard [data]
+  (->> data
+       :members
+       (vals)
+       (filter (comp pos? :stars))
+       (sort-by (comp - :local_score))
+       (map (fn [m]
+              (-> m
+                  (select-keys [:name :local_score :stars])
+                  (assoc :completion
+                         (->> (:completion_day_level m)
+                              (map (fn [[day times]]
+                                     [(parse-int (name day))
+                                      (mapv #(some-> (get-in times [% :get_star_ts])
+                                                     (parse-int)
+                                                     (Instant/ofEpochSecond)
+                                                     (.atZone (ZoneId/systemDefault))
+                                                     (->> (.format DateTimeFormatter/ISO_DATE_TIME))
+                                                     (subs 11 19))
+                                            [:1 :2])]))
+                              (into (sorted-map)))))))))
+
+(defn fetch-leaderboard [year id]
+  (http/get (format "https://adventofcode.com/%s/leaderboard/private/view/%s.json" year id)
+            {:as :json
+             :cookies {:session {:value token}}}))

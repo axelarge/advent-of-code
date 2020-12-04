@@ -5,7 +5,7 @@
 (def input (get-input 2020 4))
 
 (defn parse-passport [line]
-  (->> (str/split line #"(?m)[:\s]+")
+  (->> (str/split line #"(?m)[:\s]")
        (partition 2)
        (map (fn [[k v]] [(keyword k) v]))
        (into {})))
@@ -20,7 +20,7 @@
   (set (str/split "amb blu brn gry grn hzl oth" #"\s+")))
 
 (defn valid-keys? [pw]
-  (clojure.set/subset? required-fields (set (keys pw))))
+  (every? pw required-fields))
 
 (defn valid-year? [s lo hi]
   (when (re-matches #"\d{4}" s)

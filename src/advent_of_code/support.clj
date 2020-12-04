@@ -35,6 +35,9 @@
 (defn parse-char-int [c]
   (- (int c) 48))
 
+(defn keywords [s]
+  (map keyword (str/split s #"\s+")))
+
 (defn xrange [from to]
   (if (>= to from)
     (range from to)

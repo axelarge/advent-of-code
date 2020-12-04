@@ -19,7 +19,7 @@
    (let [path (set path)]
      (->> (for [y (range (inc y))]
             (->> (for [x (range (inc x))]
-                   (cond (wall? n [x y]) \#
+                   (cond (wall? n [x y]) "\u2588"
                          (path [x y]) \.
                          :else \space))
                  (apply str)))

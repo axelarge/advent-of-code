@@ -6,7 +6,7 @@
            (java.time Instant ZoneId)
            (java.time.format DateTimeFormatter)))
 
-(def token (slurp ".token"))
+(def token (delay (slurp ".token")))
 
 (defn- res [year day suffix]
   (io/resource (format "inputs/%d/day%02d%s.txt" year day (str/join "-" (cons "" suffix)))))
@@ -247,4 +247,4 @@
 (defn fetch-leaderboard [year id]
   (http/get (format "https://adventofcode.com/%s/leaderboard/private/view/%s.json" year id)
             {:as :json
-             :cookies {:session {:value token}}}))
+             :cookies {:session {:value @token}}}))

@@ -84,6 +84,11 @@
 (defn map2 [f coll]
   (map (partial map f) coll))
 
+(defn single [coll]
+  (let [[h & t] (seq coll)]
+    (when (nil? t)
+      h)))
+
 (defn find-where [pred coll]
   (reduce (fn [_ x] (when (pred x) (reduced x)))
           nil

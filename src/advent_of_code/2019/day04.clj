@@ -4,9 +4,7 @@
 (def input "165432-707912")
 
 (defn parse [input]
-  (->> input
-       (re-seq #"\d+")
-       (mapv parse-int)))
+  (find-pos-ints input))
 
 (defn adjacent-digits? [pass]
   (->> (partition 2 1 pass)

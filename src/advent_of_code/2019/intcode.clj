@@ -1,6 +1,5 @@
 (ns advent-of-code.2019.intcode
-  (:require [advent-of-code.support :refer :all]
-            [clojure.edn :as edn]))
+  (:require [advent-of-code.support :refer :all]))
 
 (defn mem-to-map [mem]
   (zipmap (range) mem))
@@ -13,7 +12,7 @@
    :output []})
 
 (defn parse [input]
-  (mem-to-map (mapv edn/read-string (re-seq #"-?\d+" input))))
+  (mem-to-map (find-ints input)))
 
 (defn parse-state [input]
   (make-state (parse input)))

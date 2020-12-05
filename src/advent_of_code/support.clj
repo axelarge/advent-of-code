@@ -18,8 +18,8 @@
   (not= (boolean a) (boolean b)))
 
 (defn parse-int
-  ([s] (Integer/parseInt s))
-  ([s r] (Integer/parseInt s r)))
+  ([s] (Long/parseLong s))
+  ([s r] (Long/parseLong s r)))
 
 (defn find-int [s]
   (parse-int (re-find #"-?\d+" s)))

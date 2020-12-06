@@ -25,19 +25,17 @@
 (defn move-in [keypad button direction]
   (let [position (find-in keypad button)
         position (move-pos position direction)
-        new-button (get-in keypad position " ")]
-    (if (= new-button " ") button new-button)))
+        new-button (get-in keypad position \space)]
+    (if (= new-button \space) button new-button)))
 
 (defn find-button [keypad start steps]
   (reduce (partial move-in keypad) start steps))
 
 (defn find-buttons [keypad step-lines]
-  (drop 1 (reductions (partial find-button keypad) "5" step-lines)))
+  (drop 1 (reductions (partial find-button keypad) \5 step-lines)))
 
 (defn make-pad [pad]
-  (->> pad
-       (map2 str)
-       (mapv vec)))
+  (mapv vec pad))
 
 (def pad1 (make-pad ["123"
                      "456"

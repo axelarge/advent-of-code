@@ -17,7 +17,7 @@
   (set (keywords "byr iyr eyr hgt hcl ecl pid")))
 
 (def eye-colors
-  (set (str/split "amb blu brn gry grn hzl oth" #"\s+")))
+  (set (split-ws "amb blu brn gry grn hzl oth")))
 
 (defn valid-keys? [pw]
   (every? pw required-fields))

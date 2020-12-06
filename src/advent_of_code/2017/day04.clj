@@ -1,6 +1,5 @@
 (ns advent-of-code.2017.day04
-  (:require [advent-of-code.support :refer :all]
-            [clojure.string :as str]))
+  (:require [advent-of-code.support :refer :all]))
 
 (def input (get-input 2017 4))
 
@@ -10,7 +9,7 @@
 
 (defn solve [f input]
   (->> input
-       tokenize-lines
+       (split-lines split-ws)
        (count-where (partial no-dupes-by f))))
 
 (def solve1 (partial solve identity))

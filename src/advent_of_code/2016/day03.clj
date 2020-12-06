@@ -15,11 +15,11 @@
        (reduce +)))
 
 (defn solve1 [input]
-  (count-valid (tokenize-lines parse-int input)))
+  (count-valid (split-lines find-ints input)))
 
 (defn solve2 [input]
   (->> input
-       (tokenize-lines parse-int)
+       (split-lines find-ints)
        (partition 3)
        (map transpose)
        (apply concat)

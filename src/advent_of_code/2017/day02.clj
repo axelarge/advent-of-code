@@ -1,6 +1,5 @@
 (ns advent-of-code.2017.day02
-  (:require [advent-of-code.support :refer :all]
-            [clojure.string :as str]))
+  (:require [advent-of-code.support :refer :all]))
 
 (def input (get-input 2017 2))
 
@@ -18,7 +17,7 @@
 
 (defn solve [f input]
   (->> input
-       (tokenize-lines parse-int)
+       (split-lines find-ints)
        (map f)
        (apply +)))
 

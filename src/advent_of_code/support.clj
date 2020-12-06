@@ -36,8 +36,15 @@
 (defn parse-char-int [c]
   (- (int c) 48))
 
+(defn split-ws [s]
+  (str/split s #"\s+"))
+
 (defn keywords [s]
-  (map keyword (str/split s #"\s+")))
+  (map keyword (split-ws s)))
+
+(defn split-lines
+  ([input] (str/split-lines input))
+  ([f input] (map f (str/split-lines input))))
 
 (defn xrange [from to]
   (if (>= to from)
@@ -56,15 +63,6 @@
    (if (pos? (compare a b)) a b))
   ([a b & rest]
    (reduce maximum (maximum a b) rest)))
-
-(defn tokenize-lines
-  ([input] (tokenize-lines identity input))
-  ([f input]
-   (->> input
-        str/split-lines
-        (map #(->> (str/split % #"\s+")
-                   (keep not-empty)
-                   (map f))))))
 
 (defn left-pad [s len pad]
   (let [s (str s)]

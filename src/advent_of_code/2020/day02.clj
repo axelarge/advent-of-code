@@ -16,10 +16,8 @@
   (<= lo (count-where #{c} pass) hi))
 
 (defn valid2? [[x y c pass]]
-  (->> [x y]
-       (map #(nth pass (dec %)))
-       (count-where #{c})
-       (= 1)))
+  (xor (= c (nth pass (dec x)))
+       (= c (nth pass (dec y)))))
 
 (defn solve1 [input]
   (count-where valid? (parse input)))

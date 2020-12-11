@@ -82,6 +82,25 @@
 (defn map2 [f coll]
   (map (partial map f) coll))
 
+(defn map-grid [f grid]
+  (->> grid
+       (map-indexed
+         (fn [y row]
+           (->> row
+                (map-indexed (fn [x cell] (f x y cell)))
+                (vec))))
+       (vec)))
+
+(defn reduce-grid [f init grid]
+  (reduce-kv (fn [acc y row]
+               (reduce-kv (fn [acc x v]
+                            (let [acc (f acc x y v)]
+                              (cond-> acc (reduced? acc) (reduced))))
+                          acc
+                          row))
+             init
+             grid))
+
 (defn single [coll]
   (let [[h & t] (seq coll)]
     (when (nil? t)
@@ -172,6 +191,12 @@
   (if (pos? n)
     (recur (dec n) f (f x))
     x))
+
+(defn neighbors8 [[x y]]
+  (for [dx [-1 0 1]
+        dy [-1 0 1]
+        :when (not= dx dy 0)]
+    [(+ x dx) (+ y dy)]))
 
 (defn connected-nodes
   ([neighbors from] (connected-nodes neighbors from #{}))

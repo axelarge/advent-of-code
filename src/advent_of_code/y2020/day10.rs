@@ -7,17 +7,16 @@ fn solve(nums: &Vec<u32>) -> (u32, u64) {
     let mut ones = 0;
     let mut threes = 0;
     for &x in nums {
-        let mut d = x - prev;
+        let d = x - prev;
         prev = x;
-        if d == 1 {
-            ones += 1;
-        } else if d == 3 {
-            threes += 1;
+        match d {
+            1 => ones += 1,
+            3 => threes += 1,
+            _ => ()
         }
-        while d > 1 {
+        for _ in 1..d {
             q[i % 3] = 0;
             i += 1;
-            d -= 1;
         }
         q[i % 3] = q[0] + q[1] + q[2];
         i += 1;
@@ -33,8 +32,7 @@ pub fn parse(s: &String) -> Vec<u32> {
 
 pub fn run() {
     let input = get_input(2020, 10);
-    let mut nums = parse(&input);
-    nums.sort_unstable();
+    let nums = parse(&input);
 
     println!("{:?}", timed("With parsing", || { solve(&parse(&input)) }));
     println!("{:?}", timed("Without parsing", || { solve(&nums) }));

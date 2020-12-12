@@ -28,8 +28,8 @@ def copy_template(template, to_file):
             print_skip(out_path)
 
 
-copy_template("code.clj.txt", "src/advent_of_code/{YYYY}/day{DD}.clj")
-copy_template("test.clj.txt", "test/advent_of_code/{YYYY}/day{DD}_test.clj")
+copy_template("code.clj.txt", "src/advent_of_code/y{YYYY}/day{DD}.clj")
+copy_template("test.clj.txt", "test/advent_of_code/y{YYYY}/day{DD}_test.clj")
 
 input_file = Path(replace("resources/inputs/{YYYY}/day{DD}.txt"))
 if input_file.exists():

@@ -1,7 +1,7 @@
 mod advent_of_code;
 
 use std::env;
-use crate::advent_of_code::support::{get_input, timed};
+use crate::advent_of_code::support::{timed, get_stdin, get_input};
 
 
 fn main() -> Result<(), String> {
@@ -12,7 +12,11 @@ fn main() -> Result<(), String> {
     let solve: fn(String) = get_solution(year, day)
         .ok_or(format!("No solution found for year {} day {}.", year, day))?;
 
-    let input = get_input(year, day)?;
+    let input = if args.get(3).map_or(false, |a| { a == "-" }) {
+        get_stdin()?
+    } else {
+        get_input(year, day)?
+    };
 
     timed(&format!("Year {} day {}", year, day), || { solve(input) });
 

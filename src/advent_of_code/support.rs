@@ -1,6 +1,7 @@
 use std::time::Instant;
-use std::{fs, ops};
+use std::{fs, ops, io};
 use std::convert::TryFrom;
+use std::io::Read;
 
 pub enum Part { One, Two }
 
@@ -11,6 +12,12 @@ pub fn timed<F, R>(label: &str, f: F) -> R
     let ret = f();
     println!("{} took {:.2?} to run", label, start.elapsed());
     ret
+}
+
+pub fn get_stdin() -> Result<String, String> {
+    let mut buf = String::new();
+    io::stdin().read_to_string(&mut buf).or(Err("Could not read from stdin"))?;
+    Ok(buf)
 }
 
 pub fn get_input(year: u32, day: u32) -> Result<String, String> {

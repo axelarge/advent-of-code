@@ -10,6 +10,7 @@ pub fn timed<F, R>(label: &str, f: F) -> R
     ret
 }
 
-pub fn get_input(year: i32, day: i32) -> String {
-    fs::read_to_string(format!("resources/inputs/{}/day{:02}.txt", year, day)).unwrap()
+pub fn get_input(year: u32, day: u32) -> Result<String, String> {
+    let path = format!("resources/inputs/{}/day{:02}.txt", year, day);
+    fs::read_to_string(&path).or(Err(format!("Could not open file {}", &path)))
 }

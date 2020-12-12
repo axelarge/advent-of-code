@@ -30,8 +30,7 @@ pub fn parse(s: &String) -> Vec<u32> {
     nums
 }
 
-pub fn run() {
-    let input = get_input(2020, 10);
+pub fn run(input: String) {
     let nums = parse(&input);
 
     println!("{:?}", timed("With parsing", || { solve(&parse(&input)) }));

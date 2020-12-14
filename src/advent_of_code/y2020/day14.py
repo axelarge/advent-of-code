@@ -23,7 +23,7 @@ for l in IN.splitlines():
         l = l[7:]
         mask_and = int(l.replace("X", "1"), 2)
         mask_or = int(l.replace("X", "0"), 2)
-        floating = list(reversed([36 - i - 1 for i, c in enumerate(l) if c == "X"]))
+        floating = [i for i, c in enumerate(reversed(l)) if c == "X"]
 
 print(sum(mem1.values()))
 print(sum(mem2.values()))

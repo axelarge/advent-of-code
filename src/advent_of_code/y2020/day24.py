@@ -20,9 +20,9 @@ def next_day(grid):
 
 on = set()
 for line in open("resources/inputs/2020/day24.txt"):
-    on ^= {(reduce(add, map(MOVES.get, re.findall(r"e|se|sw|w|nw|ne", line)), (0, 0)))}
-
+    on ^= {reduce(add, map(MOVES.get, re.findall(r"e|se|sw|w|nw|ne", line)), (0, 0))}
 print(len(on))
+
 for _ in range(100):
     on = next_day(on)
 print(len(on))

@@ -1,11 +1,6 @@
 N = int(open("resources/inputs/2016/day19.txt").read())
 
-after = [(i + 1) % N for i in range(N)]
-i = 0
-while after[i] != i:
-    after[i] = after[after[i]]
-    i = after[i]
-print(i + 1)
+print(int(bin(N)[3:] + "1", 2))
 
 after = [(i + 1) % N for i in range(N)]
 oppositeL = N // 2 - 1

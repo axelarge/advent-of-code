@@ -1,4 +1,4 @@
-(ns advent-of-code.{YYYY}.day{DD}
+(ns advent-of-code.y{YYYY}.day{DD}
   (:require [advent-of-code.support :refer :all]
             [clojure.string :as str]))
 

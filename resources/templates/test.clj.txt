@@ -1,6 +1,6 @@
-(ns advent-of-code.{YYYY}.day{DD}-test
+(ns advent-of-code.y{YYYY}.day{DD}-test
   (:require [clojure.test :refer :all]
-            [advent-of-code.{YYYY}.day{DD} :refer :all]))
+            [advent-of-code.y{YYYY}.day{DD} :refer :all]))
 
 (deftest test-solve1
   (is (= (solve1 input) nil)))

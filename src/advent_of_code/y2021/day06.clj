@@ -5,13 +5,13 @@
 
 (defn step [fish]
   (->> fish
-       (reduce (fn [res [k v]]
-                 (if (= k 0)
-                   (-> res
-                       (update 6 (fnil + 0) v)
-                       (assoc 8 v))
-                   (update res (dec k) (fnil + 0) v)))
-               {})))
+       (reduce-kv (fn [res k v]
+                    (if (= k 0)
+                      (-> res
+                          (update 6 (fnil + 0) v)
+                          (assoc 8 v))
+                      (update res (dec k) (fnil + 0) v)))
+                  {})))
 
 (defn solve [n input]
   (->> input

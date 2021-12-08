@@ -1,4 +1,4 @@
-IN = [(line[:10], line[11:]) for line in map(str.split, open("resources/inputs/2021/day08.txt").readlines())]
+IN = [(line[:10], line[11:]) for line in map(str.split, open("resources/inputs/2021/day08.txt"))]
 
 tot1 = 0
 tot2 = 0

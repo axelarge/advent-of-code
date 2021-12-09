@@ -192,6 +192,9 @@
     (recur (dec n) f (f x))
     x))
 
+(defn neighbors4 [[x y]]
+  [[(dec x) y] [(inc x) y] [x (dec y)] [x (inc y)]])
+
 (defn neighbors8 [[x y]]
   (for [dx [-1 0 1]
         dy [-1 0 1]

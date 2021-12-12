@@ -12,14 +12,13 @@ def solve(part2=False):
     q = [("start", {"start"}, part2)]
     while q:
         at, visited, can_go_again = q.pop()
-        if at == "end":
-            n += 1
-        else:
-            for to in E[at]:
-                if to.isupper() or to not in visited:
-                    q.append((to, visited | {to}, can_go_again))
-                elif can_go_again and to != "start":
-                    q.append((to, visited, False))
+        for to in E[at]:
+            if to == "end":
+                n += 1
+            elif to.isupper() or to not in visited:
+                q.append((to, visited | {to}, can_go_again))
+            elif can_go_again and to != "start":
+                q.append((to, visited, False))
     return n
 
 

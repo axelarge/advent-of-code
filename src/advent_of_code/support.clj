@@ -46,6 +46,9 @@
   ([input] (str/split-lines input))
   ([f input] (map f (str/split-lines input))))
 
+(defn is-upper? [^String s]
+  (every? #(Character/isUpperCase ^char %) s))
+
 (defn xrange [from to]
   (if (>= to from)
     (range from to)

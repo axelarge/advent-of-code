@@ -13,8 +13,8 @@
                      (update b conj a)))
                {})))
 
-(defn path-count [edges at visited can-visit-twice?]
-  (->> (get edges at)
+(defn path-count [edges from visited can-visit-twice?]
+  (->> (get edges from)
        (remove #{"start"})
        (keep (fn [to]
                (cond (= to "end") 1

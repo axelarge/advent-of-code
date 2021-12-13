@@ -104,6 +104,15 @@
              init
              grid))
 
+(defn display-xy-set [grid]
+  (let [[minx maxx] (apply (juxt min max) (map first grid))
+        [miny maxy] (apply (juxt min max) (map second grid))]
+    (->> (for [y (range miny (inc maxy))]
+           (->> (for [x (range minx (inc maxx))]
+                  (if (grid [x y]) "#" " "))
+                (str/join "")))
+         (str/join "\n"))))
+
 (defn single [coll]
   (let [[h & t] (seq coll)]
     (when (nil? t)

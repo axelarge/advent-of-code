@@ -18,8 +18,8 @@ def size_after(t, n):
 
 
 def solve(t, n):
-    (_, hi), *_, (_, lo) = size_after(t, n).most_common()
-    return hi - lo
+    vals = size_after(t, n).values()
+    return max(vals) - min(vals)
 
 
 print(solve(T, 10))

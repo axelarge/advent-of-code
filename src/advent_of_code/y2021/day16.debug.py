@@ -48,7 +48,7 @@ def solve(s, i=0, level=0):
         debug(f"= {num} {parts}")
         return num
 
-    debug(f"PACKET {s[:20]}{'...' if len(s) > 20 else ''} ({len(s)})")
+    debug(f"PACKET {s[i:i + 20]}{'...' if len(s) - i > 20 else ''} ({len(s) - i})")
 
     version_ids = [read_int(3)]
     debug(f"VID {version_ids[-1]}")

@@ -45,6 +45,6 @@ def solve(s, i=0, vsum=0):
 
 
 IN = open("resources/inputs/2021/day16.txt").read().strip()
-res, vsum, _ = solve("".join(f"{int(h, 16):04b}" for h in IN))
+res, vsum, _ = solve(f"{int(IN, 16):b}")
 print(res)
 print(vsum)

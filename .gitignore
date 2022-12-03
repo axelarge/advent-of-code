@@ -12,3 +12,7 @@ pom.xml.asc
 .idea/
 *.iml
 .token
+zig-out/
+zig-cache/
+.clj-kondo/
+.lsp/

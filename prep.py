@@ -3,10 +3,12 @@ from sys import argv
 from pathlib import Path
 import requests
 
-assert len(argv) == 3 and all(a.isnumeric() for a in argv[1:]), f"Usage: {argv[0]} 2020 24"
+assert len(argv) == 4 and all(a.isnumeric() for a in argv[1:3]) and argv[3] in ["clj", "py"],\
+    f"Usage: {argv[0]} 2020 24 clj|py"
 
 year = int(argv[1])
 day = int(argv[2])
+lang = argv[3]
 
 
 def replace(s):
@@ -28,8 +30,11 @@ def copy_template(template, to_file):
             print_skip(out_path)
 
 
-copy_template("code.clj.txt", "src/advent_of_code/y{YYYY}/day{DD}.clj")
-copy_template("test.clj.txt", "test/advent_of_code/y{YYYY}/day{DD}_test.clj")
+if lang == "py":
+    copy_template("code.py.txt", "src/advent_of_code/y{YYYY}/day{DD}.py")
+elif lang == "clj":
+    copy_template("code.clj.txt", "src/advent_of_code/y{YYYY}/day{DD}.clj")
+    copy_template("test.clj.txt", "test/advent_of_code/y{YYYY}/day{DD}_test.clj")
 
 input_file = Path(replace("resources/inputs/{YYYY}/day{DD}.txt"))
 if input_file.exists():

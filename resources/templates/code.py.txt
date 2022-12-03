@@ -1,0 +1,9 @@
+import re
+from collections import OrderedDict, defaultdict, deque, Counter
+from itertools import count, permutations, combinations
+from heapq import heappush, heappop
+from functools import lru_cache
+
+F = open("resources/inputs/{YYYY}/day{DD}.txt").read().splitlines()
+
+print(F)

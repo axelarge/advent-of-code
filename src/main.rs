@@ -1,3 +1,6 @@
+#![feature(iter_array_chunks)]
+#![feature(binary_heap_into_iter_sorted)]
+
 mod advent_of_code;
 
 use std::env;
@@ -27,6 +30,9 @@ fn get_solution(year: u32, day: u32) -> Option<fn(String)> {
     Option::from(match (year, day) {
         (2020, 10) => advent_of_code::y2020::day10::run,
         (2020, 12) => advent_of_code::y2020::day12::run,
+        (2020, 15) => advent_of_code::y2020::day15::run,
+        (2022, 01) => advent_of_code::y2022::day01::run,
+        (2022, 03) => advent_of_code::y2022::day03::run,
         _ => return None
     })
 }

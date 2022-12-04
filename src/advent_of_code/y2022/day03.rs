@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::ops::BitAnd;
 
 use crate::timed;
 
@@ -10,44 +10,71 @@ pub fn run(input: String) {
 
 fn part1(input: &String) -> u32 {
     input.lines()
-        .map(|line| {
+        .filter_map(|line| {
             let l = line.len() / 2;
-            line[0..l].bytes().find(|c| line[l..].bytes().any(|lc| lc == *c)).unwrap()
+            // let seen = bitset(&line[..l]);
+            // line[l..].bytes().map(score).find(|s| seen.contains(*s))
+            line[0..l].bytes().find(|c| line[l..].bytes().any(|lc| lc == *c))
         })
-        .map(score)
+        .map(|x| score(x) as u32)
         .sum()
 }
 
 fn part2(input: &String) -> u32 {
-    let mut map1 = HashSet::<u8>::new();
-    let mut map2 = HashSet::<u8>::new();
     input.lines().array_chunks::<3>()
-        .map(|chunk| {
-            map1.clear();
-            map2.clear();
-            map1.extend(chunk[0].bytes());
-            map2.extend(chunk[1].bytes().filter(|ch| map1.contains(ch)));
-            chunk[2].bytes().find(|ch| map2.contains(ch)).unwrap()
+        .map(|[a, b, c]| {
+            // let seen = bitset(a) & bitset(b) & bitset(c);
+            // seen.bits.trailing_zeros()
+            let seen = bitset(a) & bitset(b);
+            c.bytes().map(score).find(|s| seen.contains(*s)).unwrap() as u32
         })
-        .map(score)
         .sum()
 }
 
-// fn part2(input: &String) -> u32 {
-//     input.lines().array_chunks::<3>()
-//         .map(|chunk| {
-//             let a: HashSet<_> = chunk[0].bytes().collect();
-//             let b: HashSet<_> = chunk[1].bytes().filter(|ch| a.contains(ch)).collect();
-//             chunk[2].bytes().find(|c| b.contains(c)).unwrap()
-//         })
-//         .map(score)
-//         .sum()
-// }
-
-fn score(c: u8) -> u32 {
+fn score(c: u8) -> u8 {
     (match c {
         b'a'..=b'z' => c - b'a' + 1,
         b'A'..=b'Z' => c - b'A' + 27,
-        _ => panic!("Unexpected char {}", c)
+        _ => panic!("Unexpected char {}", c),
     }).into()
+}
+
+#[inline]
+fn bitset(s: &str) -> BitSet<u64> {
+    s.bytes().map(score).collect()
+}
+
+struct BitSet<T> {
+    bits: T,
+}
+
+impl BitSet<u64> {
+    pub fn new() -> BitSet<u64> {
+        BitSet { bits: 0 }
+    }
+    pub fn add(&mut self, idx: u8) {
+        self.bits |= 1 << idx;
+    }
+    pub fn contains(&self, idx: u8) -> bool {
+        &self.bits & 1 << idx != 0
+    }
+}
+
+impl FromIterator<u8> for BitSet<u64> {
+    fn from_iter<T: IntoIterator<Item=u8>>(iter: T) -> Self {
+        let mut bitset = BitSet::new();
+        for idx in iter {
+            bitset.add(idx);
+        }
+        return bitset;
+    }
+}
+
+impl<T> BitAnd<BitSet<T>> for BitSet<T>
+    where T: BitAnd<Output=T>
+{
+    type Output = Self;
+    fn bitand(self, rhs: BitSet<T>) -> Self::Output {
+        BitSet { bits: self.bits & rhs.bits }
+    }
 }

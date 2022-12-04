@@ -32,7 +32,7 @@ for chunk in open("resources/inputs/2020/day20.txt").read().split("\n\n"):
     tid = int(lines[0][5:-1])
     tile = parse(lines[1:])
     tiles[tid] = tile
-    for e in ["T", "B", "L", "R"]:
+    for e in "TBLR":
         edge = get_edge(tile, e)
         for tid2 in by_edge[edge]:
             connected[tid].add(tid2)

@@ -30,13 +30,12 @@ pub fn run(input: []const u8) !Result {
 const Range = struct {
     start: i32,
     end: i32,
-    const Self = @This();
 
-    inline fn includes(self: Self, other: Self) bool {
+    inline fn includes(self: Range, other: Range) bool {
         return self.start <= other.start and other.end <= self.end;
     }
 
-    inline fn overlaps(self: Self, other: Self) bool {
+    inline fn overlaps(self: Range, other: Range) bool {
         return self.start <= other.end and other.start <= self.end;
     }
 };

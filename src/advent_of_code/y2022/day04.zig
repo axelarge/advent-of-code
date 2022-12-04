@@ -9,26 +9,37 @@ pub fn run(input: []const u8) !Result {
     while (lines.next()) |line| {
         if (line.len == 0) continue;
 
-        var x: [4]i32 = undefined;
         var tokens = std.mem.tokenize(u8, line, "-,");
-        var i: usize = 0;
-        while (i < 4) : (i += 1) {
-            x[i] = try std.fmt.parseInt(i32, tokens.next().?, 10);
-        }
+        const a = try std.fmt.parseInt(i32, tokens.next().?, 10);
+        const b = try std.fmt.parseInt(i32, tokens.next().?, 10);
+        const c = try std.fmt.parseInt(i32, tokens.next().?, 10);
+        const d = try std.fmt.parseInt(i32, tokens.next().?, 10);
+        const r1 = Range{ .start = a, .end = b };
+        const r2 = Range{ .start = c, .end = d };
 
-        if (x[0] <= x[2] and x[3] <= x[1] or
-            x[2] <= x[0] and x[1] <= x[3])
+        if (r1.includes(r2) or r2.includes(r1))
             part1 += 1;
 
-        if ((x[0] <= x[2] and x[2] <= x[1]) or
-            (x[0] <= x[3] and x[3] <= x[1]) or
-            (x[2] <= x[0] and x[0] <= x[3]) or
-            (x[2] <= x[1] and x[1] <= x[3]))
+        if (r1.overlaps(r2))
             part2 += 1;
     }
 
     return .{ .part1 = part1, .part2 = part2 };
 }
+
+const Range = struct {
+    start: i32,
+    end: i32,
+    const Self = @This();
+
+    inline fn includes(self: Self, other: Self) bool {
+        return self.start <= other.start and other.end <= self.end;
+    }
+
+    inline fn overlaps(self: Self, other: Self) bool {
+        return self.start <= other.end and other.start <= self.end;
+    }
+};
 
 test {
     const sample =

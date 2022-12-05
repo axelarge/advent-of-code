@@ -8,15 +8,11 @@ steps = [tuple(map(int, re.findall(r"\d+", line))) for line in B]
 
 def solve(part1):
     stacks = [s[:] for s in STACKS]
-    if part1:
-        for n, fr, to in steps:
-            for _ in range(n):
-                stacks[to - 1].append(stacks[fr - 1].pop())
-    else:
-        for n, fr, to in steps:
-            stacks[to - 1].extend(stacks[fr - 1][-n:])
-            del stacks[fr - 1][-n:]
-    return "".join(list(c[-1] for c in filter(None, stacks)))
+    for n, fr, to in steps:
+        xf = stacks[fr - 1][-n:]
+        stacks[to - 1].extend(reversed(xf) if part1 else xf)
+        del stacks[fr - 1][-n:]
+    return "".join(list(c[-1] for c in stacks))
 
 
 p1 = solve(True)

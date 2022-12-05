@@ -287,7 +287,6 @@
                               (map (fn [[day times]]
                                      [(parse-int (name day))
                                       (mapv #(some-> (get-in times [% :get_star_ts])
-                                                     (parse-int)
                                                      (Instant/ofEpochSecond)
                                                      (.atZone (ZoneId/systemDefault))
                                                      (->> (.format DateTimeFormatter/ISO_DATE_TIME))

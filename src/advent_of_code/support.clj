@@ -289,8 +289,7 @@
                                       (mapv #(some-> (get-in times [% :get_star_ts])
                                                      (Instant/ofEpochSecond)
                                                      (.atZone (ZoneId/systemDefault))
-                                                     (->> (.format DateTimeFormatter/ISO_DATE_TIME))
-                                                     (subs 11 19))
+                                                     (->> (.format DateTimeFormatter/ISO_LOCAL_TIME)))
                                             [:1 :2])]))
                               (into (sorted-map)))))))))
 

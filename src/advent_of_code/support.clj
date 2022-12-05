@@ -85,6 +85,14 @@
 (defn map2 [f coll]
   (map (partial map f) coll))
 
+(defn subv
+  ([v start]
+   (subv v start (count v)))
+  ([v start end]
+   (let [start (cond-> start (neg? start) (+ (count v)))
+         end (cond-> end (neg? end) (+ (count v)))]
+     (subvec v start end))))
+
 (defn map-grid [f grid]
   (->> grid
        (map-indexed

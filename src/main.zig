@@ -31,6 +31,8 @@ pub fn main() !void {
         runner = &y2022.day03.run;
     } else if (year == 2022 and day == 4) {
         runner = &y2022.day04.run;
+    } else if (year == 2022 and day == 5) {
+        runner = &y2022.day05.run;
     } else {
         try stderr.print("No implementation for year {} day {}\n", .{ year, day });
         return;

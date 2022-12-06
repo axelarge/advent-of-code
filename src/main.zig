@@ -3,7 +3,15 @@ const y2022 = @import("advent_of_code/y2022/y2022.zig");
 const assert = std.debug.assert;
 const Timer = std.time.Timer;
 
-pub const Result = struct { part1: i32, part2: i32 };
+pub const Result = struct {
+    part1: i32,
+    part2: i32,
+
+    pub fn of(part1: i32, part2: i32) Result {
+        return .{ .part1 = part1, .part2 = part2 };
+    }
+};
+
 const Runner = *const fn ([]const u8) anyerror!Result;
 
 pub fn main() !void {
@@ -33,6 +41,8 @@ pub fn main() !void {
         runner = &y2022.day04.run;
     } else if (year == 2022 and day == 5) {
         runner = &y2022.day05.run;
+    } else if (year == 2022 and day == 6) {
+        runner = &y2022.day06.run;
     } else {
         try stderr.print("No implementation for year {} day {}\n", .{ year, day });
         return;

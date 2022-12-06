@@ -1,31 +1,7 @@
 const std = @import("std");
 const root = @import("../../main.zig");
 const Result = root.Result;
-
-fn BitSet(comptime T: type) type {
-    return struct {
-        bits: T = 0,
-
-        const Self = @This();
-        const V = std.math.Log2Int(T);
-
-        inline fn full() Self {
-            return .{ .bits = ~@as(T, 0) };
-        }
-
-        inline fn add(self: *Self, val: V) void {
-            self.bits |= @as(T, 1) << val;
-        }
-
-        inline fn contains(self: Self, val: V) bool {
-            return self.bits & @as(T, 1) << val != 0;
-        }
-
-        inline fn intersect(self: *Self, other: Self) void {
-            self.bits &= other.bits;
-        }
-    };
-}
+const BitSet = @import("../../support.zig").BitSet;
 
 pub fn run(input: []const u8) !Result {
     return .{ .part1 = part1(input), .part2 = try part2(input) };

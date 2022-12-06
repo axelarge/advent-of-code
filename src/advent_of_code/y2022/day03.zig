@@ -38,13 +38,11 @@ fn part2(input: []const u8) !i32 {
 }
 
 fn value(c: u8) u6 {
-    if (c >= 'a' and c <= 'z') {
-        return @intCast(u6, c - 'a' + 1);
-    } else if (c >= 'A' and c <= 'Z') {
-        return @intCast(u6, c - 'A' + 1 + 26);
-    } else {
-        unreachable;
-    }
+    return switch (c) {
+        'a'...'z' => @intCast(u6, c - 'a' + 1),
+        'A'...'Z' => @intCast(u6, c - 'A' + 1 + 26),
+        else => unreachable,
+    };
 }
 
 test "2022.03 sample" {

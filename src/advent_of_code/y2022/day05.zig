@@ -23,7 +23,7 @@ pub fn run(input: []const u8) !Result {
         }
         break :blk size;
     };
-    std.debug.print("Stack max size: {}\n", .{stackSize});
+    // std.debug.print("Stack max size: {}\n", .{stackSize});
 
     var stacks = try Stacks.initCapacity(alloc, stackCount);
     var stacks2 = try Stacks.initCapacity(alloc, stackCount);

@@ -1,7 +1,7 @@
 const std = @import("std");
 const root = @import("../../main.zig");
 const Result = root.Result;
-const BitSet = @import("../../support.zig").BitSet;
+const BitSet = @import("../../support.zig").BitSet(u64);
 
 pub fn run(input: []const u8) !Result {
     return .{ .part1 = part1(input), .part2 = try part2(input) };
@@ -23,10 +23,10 @@ fn part2(input: []const u8) !i32 {
     var lines = std.mem.split(u8, input, "\n");
     var res: i32 = 0;
     while (lines.rest().len > 1) {
-        var seen = BitSet(u64).full();
+        var seen = BitSet.full();
         var i: u8 = 0;
         while (i < 3) : (i += 1) {
-            var seenNow: BitSet(u64) = .{};
+            var seenNow = BitSet.empty();
             for (lines.next().?) |c| {
                 seenNow.add(value(c));
             }

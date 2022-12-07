@@ -5,7 +5,7 @@ const Result = root.Result;
 pub const Solution = root.Solution{ .year = 2022, .day = 1, .run = run };
 
 fn run(input: []const u8) !Result {
-    var maxSums = std.PriorityQueue(i32, void, compareFn).init(std.heap.page_allocator, {});
+    var max = [_]i32{0} ** 3;
     var chunks = std.mem.split(u8, input, "\n\n");
     while (chunks.next()) |chunk| {
         var sum: i32 = 0;
@@ -15,37 +15,18 @@ fn run(input: []const u8) !Result {
                 sum += try std.fmt.parseInt(i32, line, 10);
             }
         }
-        try maxSums.add(sum);
+
+        var i: usize = 0;
+        while (i < max.len) : (i += 1) {
+            if (sum < max[i]) continue;
+            const tmp = max[i];
+            max[i] = sum;
+            sum = tmp;
+        }
     }
 
-    const max1 = maxSums.remove();
-    const max3 = max1 + maxSums.remove() + maxSums.remove();
-    return Result.of(max1, max3);
+    return Result.of(max[0], max[0] + max[1] + max[2]);
 }
-
-// pub fn run(input: []const u8) !Result {
-//     const allocator = std.heap.page_allocator;
-//     var maxSums = std.PriorityQueue(i32, void, compareFn).init(allocator, {});
-
-//     var sum: i32 = 0;
-//     var lines = std.mem.split(u8, input, "\n");
-//     while (lines.next()) |line| {
-//         if (line.len > 0) {
-//             sum += try std.fmt.parseInt(i32, line, 10);
-//         } else {
-//             try maxSums.add(sum);
-//             sum = 0;
-//         }
-//     }
-//     if (sum != 0) {
-//         try maxSums.add(sum);
-//     }
-
-//     const max1 = maxSums.remove();
-//     const max3 = max1 + maxSums.remove() + maxSums.remove();
-
-//     return .{ .part1 = max1, .part2 = max3 };
-// }
 
 fn compareFn(context: void, a: i32, b: i32) std.math.Order {
     _ = context;

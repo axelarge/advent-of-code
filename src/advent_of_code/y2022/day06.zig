@@ -3,10 +3,12 @@ const root = @import("../../main.zig");
 const Result = root.Result;
 const BitSet = @import("../../support.zig").BitSet(u32);
 
-pub fn run(input: []const u8) !Result {
+pub const Solution = root.Solution{ .year = 2022, .day = 6, .run = run };
+
+fn run(input: []const u8) !Result {
     const part1: i32 = find(input[0 .. input.len - 1], 4);
     const part2: i32 = find(input[0 .. input.len - 1], 14);
-    return .{ .part1 = part1, .part2 = part2 };
+    return Result.of(part1, part2);
 }
 
 fn find(input: []const u8, n: u8) i32 {

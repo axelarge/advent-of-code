@@ -2,8 +2,9 @@ const std = @import("std");
 const root = @import("../../main.zig");
 const Result = root.Result;
 
+pub const Solution = root.Solution{ .year = 2022, .day = 1, .run = run };
 
-pub fn run(input: []const u8) !Result {
+fn run(input: []const u8) !Result {
     var maxSums = std.PriorityQueue(i32, void, compareFn).init(std.heap.page_allocator, {});
     var chunks = std.mem.split(u8, input, "\n\n");
     while (chunks.next()) |chunk| {
@@ -19,7 +20,7 @@ pub fn run(input: []const u8) !Result {
 
     const max1 = maxSums.remove();
     const max3 = max1 + maxSums.remove() + maxSums.remove();
-    return .{ .part1 = max1, .part2 = max3 };
+    return Result.of(max1, max3);
 }
 
 // pub fn run(input: []const u8) !Result {
@@ -70,8 +71,6 @@ test "2022.01 sample" {
     ;
 
     var res = try run(data);
-    try std.testing.expectEqual(@as(i32, 24000), res.part1);
-    try std.testing.expectEqual(@as(i32, 45000), res.part2);
-    // try std.testing.expectEqual(@as(i32, 67658), res.part1);
-    // try std.testing.expectEqual(@as(i32, 200158), res.part2);
+    try std.testing.expectEqual(@as(i32, 24000), res.part1.int);
+    try std.testing.expectEqual(@as(i32, 45000), res.part2.int);
 }

@@ -5,7 +5,9 @@ const Result = root.Result;
 const Stack = std.ArrayList(u8);
 const Stacks = std.ArrayList(Stack);
 
-pub fn run(input: []const u8) !Result {
+pub const Solution = root.Solution{ .year = 2022, .day = 5, .run = run };
+
+fn run(input: []const u8) !Result {
     var buf: [2048]u8 = undefined;
     var fba = std.heap.FixedBufferAllocator.init(&buf);
     var alloc = fba.allocator();
@@ -70,13 +72,7 @@ pub fn run(input: []const u8) !Result {
         stacks2.items[toIdx].appendSliceAssumeCapacity(dropLast(u8, &stacks2.items[fromIdx], n));
     }
 
-    std.debug.print("Part 1: {s}\n", .{getResult(stacks)});
-    std.debug.print("Part 2: {s}\n", .{getResult(stacks2)});
-
-    var part1: i32 = 0;
-    var part2: i32 = 0;
-
-    return .{ .part1 = part1, .part2 = part2 };
+    return Result.ofStrings(try getResult(stacks), try getResult(stacks2));
 }
 
 fn dropLast(comptime T: type, list: *std.ArrayList(T), n: usize) []T {
@@ -85,8 +81,8 @@ fn dropLast(comptime T: type, list: *std.ArrayList(T), n: usize) []T {
     return dropped;
 }
 
-fn getResult(stacks: Stacks) [16]u8 {
-    var result = [_]u8{0} ** 16;
+fn getResult(stacks: Stacks) ![]u8 {
+    var result = try root.resultAllocator.alloc(u8, stacks.items.len);
     for (stacks.items) |stack, i| {
         result[i] = stack.items[stack.items.len - 1];
     }
@@ -106,6 +102,6 @@ test {
         \\move 1 from 1 to 2
     ;
     const res = try run(sample);
-    try std.testing.expectEqual(@as(i32, 0), res.part1);
-    try std.testing.expectEqual(@as(i32, 0), res.part2);
+    try std.testing.expectEqualStrings("CMZ", res.part1.str);
+    try std.testing.expectEqualStrings("MCD", res.part2.str);
 }

@@ -3,8 +3,10 @@ const root = @import("../../main.zig");
 const Result = root.Result;
 const BitSet = @import("../../support.zig").BitSet(u64);
 
-pub fn run(input: []const u8) !Result {
-    return .{ .part1 = part1(input), .part2 = try part2(input) };
+pub const Solution = root.Solution{ .year = 2022, .day = 3, .run = run };
+
+fn run(input: []const u8) !Result {
+    return Result.of(part1(input), try part2(input));
 }
 
 fn part1(input: []const u8) i32 {
@@ -56,6 +58,6 @@ test "2022.03 sample" {
     ;
 
     var res = try run(sample);
-    try std.testing.expectEqual(@as(i32, 157), res.part1);
-    try std.testing.expectEqual(@as(i32, 70), res.part2);
+    try std.testing.expectEqual(@as(i32, 157), res.part1.int);
+    try std.testing.expectEqual(@as(i32, 70), res.part2.int);
 }

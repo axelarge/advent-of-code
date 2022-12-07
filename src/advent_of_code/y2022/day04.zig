@@ -2,7 +2,9 @@ const std = @import("std");
 const root = @import("../../main.zig");
 const Result = root.Result;
 
-pub fn run(input: []const u8) !Result {
+pub const Solution = root.Solution{ .year = 2022, .day = 4, .run = run };
+
+fn run(input: []const u8) !Result {
     var part1: i32 = 0;
     var part2: i32 = 0;
     var lines = std.mem.split(u8, input, "\n");
@@ -24,7 +26,7 @@ pub fn run(input: []const u8) !Result {
             part2 += 1;
     }
 
-    return .{ .part1 = part1, .part2 = part2 };
+    return Result.of(part1, part2);
 }
 
 const Range = struct {
@@ -50,6 +52,6 @@ test {
         \\2-6,4-8
     ;
     const res = try run(sample);
-    try std.testing.expectEqual(@as(i32, 2), res.part1);
-    try std.testing.expectEqual(@as(i32, 4), res.part2);
+    try std.testing.expectEqual(@as(i32, 2), res.part1.int);
+    try std.testing.expectEqual(@as(i32, 4), res.part2.int);
 }

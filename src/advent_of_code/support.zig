@@ -1,5 +1,30 @@
 const std = @import("std");
 
+pub const Error = error{NoImplError};
+pub const ResultType = enum { int, str };
+pub const ResultVal = union(ResultType) {
+    int: i32,
+    str: []const u8,
+};
+
+pub const Result = struct {
+    part1: ResultVal,
+    part2: ResultVal,
+
+    pub fn of(part1: i32, part2: i32) Result {
+        return .{ .part1 = .{ .int = part1 }, .part2 = .{ .int = part2 } };
+    }
+
+    pub fn ofStrings(part1: []const u8, part2: []const u8) Result {
+        return .{ .part1 = .{ .str = part1 }, .part2 = .{ .str = part2 } };
+    }
+};
+
+pub const Solution = struct {
+    year: u32,
+    day: u32,
+    run: *const fn ([]const u8) anyerror!Result,
+};
 
 pub fn BitSet(comptime T: type) type {
     return struct {

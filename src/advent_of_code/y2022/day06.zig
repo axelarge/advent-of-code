@@ -1,7 +1,7 @@
 const std = @import("std");
-const root = @import("../../main.zig");
+const root = @import("../main.zig");
 const Result = root.Result;
-const BitSet = @import("../../support.zig").BitSet(u32);
+const BitSet = root.support.BitSet(u32);
 
 pub const Solution = root.Solution{ .year = 2022, .day = 6, .run = run };
 

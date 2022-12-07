@@ -1,8 +1,13 @@
 const std = @import("std");
-const y2022 = @import("advent_of_code/y2022/y2022.zig");
 const assert = std.debug.assert;
-const Timer = std.time.Timer;
 
+pub const support = @import("support.zig");
+const ResultType = support.ResultType;
+const ResultVal = support.ResultVal;
+pub const Result = support.Result;
+pub const Solution = support.Solution;
+
+const Timer = std.time.Timer;
 const stderr = std.io.getStdErr().writer();
 var bw = std.io.bufferedWriter(std.io.getStdOut().writer());
 const stdout = bw.writer();
@@ -10,32 +15,6 @@ const stdout = bw.writer();
 var resultsBuf: [2048]u8 = undefined;
 var fba = std.heap.FixedBufferAllocator.init(&resultsBuf);
 pub const resultAllocator = fba.allocator();
-
-const Error = error{NoImplError};
-const ResultType = enum { int, str };
-const ResultVal = union(ResultType) {
-    int: i32,
-    str: []const u8,
-};
-
-pub const Result = struct {
-    part1: ResultVal,
-    part2: ResultVal,
-
-    pub fn of(part1: i32, part2: i32) Result {
-        return .{ .part1 = .{ .int = part1 }, .part2 = .{ .int = part2 } };
-    }
-
-    pub fn ofStrings(part1: []const u8, part2: []const u8) Result {
-        return .{ .part1 = .{ .str = part1 }, .part2 = .{ .str = part2 } };
-    }
-};
-
-pub const Solution = struct {
-    year: u32,
-    day: u32,
-    run: *const fn ([]const u8) anyerror!Result,
-};
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -50,7 +29,7 @@ pub fn main() !void {
         const day = try std.fmt.parseInt(u32, args[2], 10);
         const solution = getSolution(year, day) orelse {
             try stderr.print("No implementation for year {} day {}\n", .{ year, day });
-            return Error.NoImplError;
+            return error.NoImplError;
         };
         try runSolution(allocator, solution);
     } else if (args.len == 2 and std.mem.eql(u8, args[1][0..], "all")) {
@@ -106,6 +85,7 @@ fn printResult(result: ResultVal, part: usize) !void {
     }
 }
 
+const y2022 = @import("y2022/y2022.zig");
 const solutions = [_]Solution{
     y2022.day01.Solution,
     y2022.day03.Solution,

@@ -1,5 +1,5 @@
 const std = @import("std");
-const root = @import("../../main.zig");
+const root = @import("../main.zig");
 const Result = root.Result;
 
 const Stack = std.ArrayList(u8);

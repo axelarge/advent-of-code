@@ -1,5 +1,5 @@
 const std = @import("std");
-const root = @import("../../main.zig");
+const root = @import("../main.zig");
 const Result = root.Result;
 
 pub const Solution = root.Solution{ .year = 2022, .day = 4, .run = run };

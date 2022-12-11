@@ -98,6 +98,7 @@ const solutions = [_]Solution{
     y2022.day04.Solution,
     y2022.day05.Solution,
     y2022.day06.Solution,
+    y2022.day11.Solution,
 };
 
 test {

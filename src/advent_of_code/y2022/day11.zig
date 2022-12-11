@@ -8,11 +8,11 @@ const Item = u64;
 const ItemList = std.ArrayList(Item);
 
 fn run(input: []const u8) !Result {
-    var buf: [2048]u8 = undefined;
-    var fba = std.heap.FixedBufferAllocator.init(&buf);
-    const allocator = fba.allocator();
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
 
-    var monkeys = try std.ArrayList(Monkey).initCapacity(allocator, 8);
+    var monkeys = std.ArrayList(Monkey).init(allocator);
     var rawMonkeys = std.mem.split(u8, input, "\n\n");
     while (rawMonkeys.next()) |rawMonkey| {
         if (rawMonkey.len == 0) break;
@@ -51,18 +51,12 @@ fn run(input: []const u8) !Result {
             .falseIdx = falseIdx,
         });
     }
-
-    return Result.of(
-        try solve(monkeys.items, true),
-        try solve(monkeys.items, false),
-    );
+    const p1 = try solve(allocator, monkeys.items, true);
+    const p2 = try solve(allocator, monkeys.items, false);
+    return Result.of(p1, p2);
 }
 
-fn solve(monkeys: []Monkey, comptime part1: bool) !u64 {
-    var buf: [4096]u8 = undefined;
-    var fba = std.heap.FixedBufferAllocator.init(&buf);
-    const allocator = fba.allocator();
-
+fn solve(allocator: std.mem.Allocator, monkeys: []Monkey, comptime part1: bool) !u64 {
     var totalItems: usize = 0;
     var mod: u32 = 1;
     for (monkeys) |m| {

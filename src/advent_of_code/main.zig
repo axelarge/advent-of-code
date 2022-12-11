@@ -35,17 +35,27 @@ pub fn main() !void {
             return error.NoImplError;
         };
         try runSolution(allocator, solution, useStdIn);
-    } else if (args.len == 2 and std.mem.eql(u8, args[1][0..], "all")) {
+    } else if (args.len == 2) {
+        const year = std.fmt.parseInt(u32, args[1], 10) catch null;
+        if (year == null and !std.mem.eql(u8, args[1][0..], "all")) {
+            try printUsage();
+            return;
+        }
         var timer = try Timer.start();
         for (solutions) |solution| {
+            if (year != null and solution.year != year.?) continue;
             try runSolution(allocator, solution, false);
             try stdout.print("\n", .{});
         }
         const elapsed = timer.read() / std.time.ns_per_us;
         try stdout.print("Total time: {}µs\n", .{elapsed});
     } else {
-        try stderr.print("Usage: main [year] [day] or main all\n", .{});
+        try printUsage();
     }
+}
+
+fn printUsage() !void {
+    try stderr.print("Usage: main [year] [day]? or main all\n", .{});
 }
 
 fn getSolution(year: u32, day: u32) ?Solution {

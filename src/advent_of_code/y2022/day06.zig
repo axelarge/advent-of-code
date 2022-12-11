@@ -6,12 +6,12 @@ const BitSet = root.support.BitSet(u32);
 pub const Solution = root.Solution{ .year = 2022, .day = 6, .run = run };
 
 fn run(input: []const u8) !Result {
-    const part1: i32 = find(input[0 .. input.len - 1], 4);
-    const part2: i32 = find(input[0 .. input.len - 1], 14);
+    const part1: u32 = find(input[0 .. input.len - 1], 4).?;
+    const part2: u32 = find(input[0 .. input.len - 1], 14).?;
     return Result.of(part1, part2);
 }
 
-fn find(input: []const u8, n: u8) i32 {
+fn find(input: []const u8, n: u8) ?u32 {
     var i: usize = 0;
     while (i < input.len - n) : (i += 1) {
         var bits = BitSet.empty();
@@ -19,9 +19,9 @@ fn find(input: []const u8, n: u8) i32 {
             bits.add(@truncate(u5, ch - 'a'));
         }
         if (@popCount(bits.bits) == n)
-            return @intCast(i32, i + n);
+            return @intCast(u32, i + n);
     }
-    return -1;
+    return null;
 }
 
 test {

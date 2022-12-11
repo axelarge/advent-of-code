@@ -5,17 +5,17 @@ const Result = root.Result;
 pub const Solution = root.Solution{ .year = 2022, .day = 4, .run = run };
 
 fn run(input: []const u8) !Result {
-    var part1: i32 = 0;
-    var part2: i32 = 0;
+    var part1: u32 = 0;
+    var part2: u32 = 0;
     var lines = std.mem.split(u8, input, "\n");
     while (lines.next()) |line| {
         if (line.len == 0) continue;
 
         var tokens = std.mem.tokenize(u8, line, "-,");
-        const a = try std.fmt.parseInt(i32, tokens.next().?, 10);
-        const b = try std.fmt.parseInt(i32, tokens.next().?, 10);
-        const c = try std.fmt.parseInt(i32, tokens.next().?, 10);
-        const d = try std.fmt.parseInt(i32, tokens.next().?, 10);
+        const a = try std.fmt.parseInt(u32, tokens.next().?, 10);
+        const b = try std.fmt.parseInt(u32, tokens.next().?, 10);
+        const c = try std.fmt.parseInt(u32, tokens.next().?, 10);
+        const d = try std.fmt.parseInt(u32, tokens.next().?, 10);
         const r1 = Range{ .start = a, .end = b };
         const r2 = Range{ .start = c, .end = d };
 
@@ -30,8 +30,8 @@ fn run(input: []const u8) !Result {
 }
 
 const Range = struct {
-    start: i32,
-    end: i32,
+    start: u32,
+    end: u32,
 
     inline fn includes(self: Range, other: Range) bool {
         return self.start <= other.start and other.end <= self.end;
@@ -52,6 +52,6 @@ test {
         \\2-6,4-8
     ;
     const res = try run(sample);
-    try std.testing.expectEqual(@as(i32, 2), res.part1.int);
-    try std.testing.expectEqual(@as(i32, 4), res.part2.int);
+    try std.testing.expectEqual(@as(u64, 2), res.part1.int);
+    try std.testing.expectEqual(@as(u64, 4), res.part2.int);
 }

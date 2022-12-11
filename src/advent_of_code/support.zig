@@ -3,7 +3,7 @@ const std = @import("std");
 pub const Error = error{NoImplError};
 pub const ResultType = enum { int, str };
 pub const ResultVal = union(ResultType) {
-    int: i32,
+    int: u64,
     str: []const u8,
 };
 
@@ -11,7 +11,7 @@ pub const Result = struct {
     part1: ResultVal,
     part2: ResultVal,
 
-    pub fn of(part1: i32, part2: i32) Result {
+    pub fn of(part1: u64, part2: u64) Result {
         return .{ .part1 = .{ .int = part1 }, .part2 = .{ .int = part2 } };
     }
 

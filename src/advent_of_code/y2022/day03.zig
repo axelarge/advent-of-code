@@ -9,8 +9,8 @@ fn run(input: []const u8) !Result {
     return Result.of(part1(input), try part2(input));
 }
 
-fn part1(input: []const u8) i32 {
-    var res: i32 = 0;
+fn part1(input: []const u8) u32 {
+    var res: u32 = 0;
     var lines = std.mem.split(u8, input, "\n");
     while (lines.next()) |line| {
         if (line.len == 0) break;
@@ -21,9 +21,9 @@ fn part1(input: []const u8) i32 {
     return res;
 }
 
-fn part2(input: []const u8) !i32 {
+fn part2(input: []const u8) !u32 {
     var lines = std.mem.split(u8, input, "\n");
-    var res: i32 = 0;
+    var res: u32 = 0;
     while (lines.rest().len > 1) {
         var seen = BitSet.full();
         var i: u8 = 0;
@@ -58,6 +58,6 @@ test "2022.03 sample" {
     ;
 
     var res = try run(sample);
-    try std.testing.expectEqual(@as(i32, 157), res.part1.int);
-    try std.testing.expectEqual(@as(i32, 70), res.part2.int);
+    try std.testing.expectEqual(@as(u64, 157), res.part1.int);
+    try std.testing.expectEqual(@as(u64, 70), res.part2.int);
 }

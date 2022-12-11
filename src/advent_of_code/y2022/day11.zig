@@ -94,7 +94,7 @@ fn solve(allocator: std.mem.Allocator, monkeys: []Monkey, comptime part1: bool) 
         }
     }
     std.sort.sort(u32, times, {}, std.sort.desc(u32));
-    return @intCast(u64, times[0]) * @intCast(u64, times[1]);
+    return @as(u64, times[0]) * @as(u64, times[1]);
 }
 
 const Monkey = struct {

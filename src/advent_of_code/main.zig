@@ -26,18 +26,19 @@ pub fn main() !void {
     defer bw.flush() catch {};
 
     const args = try std.process.argsAlloc(allocator);
-    if (args.len == 3) {
+    if (args.len >= 3) {
         const year = try std.fmt.parseInt(u32, args[1], 10);
         const day = try std.fmt.parseInt(u32, args[2], 10);
+        const useStdIn = args.len == 4 and std.mem.eql(u8, args[3], "-");
         const solution = getSolution(year, day) orelse {
             try stderr.print("No implementation for year {} day {}\n", .{ year, day });
             return error.NoImplError;
         };
-        try runSolution(allocator, solution);
+        try runSolution(allocator, solution, useStdIn);
     } else if (args.len == 2 and std.mem.eql(u8, args[1][0..], "all")) {
         var timer = try Timer.start();
         for (solutions) |solution| {
-            try runSolution(allocator, solution);
+            try runSolution(allocator, solution, false);
             try stdout.print("\n", .{});
         }
         const elapsed = timer.read() / std.time.ns_per_us;
@@ -55,12 +56,15 @@ fn getSolution(year: u32, day: u32) ?Solution {
     return null;
 }
 
-fn runSolution(allocator: std.mem.Allocator, solution: Solution) !void {
+fn runSolution(allocator: std.mem.Allocator, solution: Solution, useStdIn: bool) !void {
     const year = solution.year;
     const day = solution.day;
 
     var timer = try Timer.start();
-    const input = try readInputFile(allocator, year, day);
+    const input = switch (useStdIn) {
+        true => try std.io.getStdIn().readToEndAlloc(allocator, maxFileSize),
+        false => try readInputFile(allocator, year, day),
+    };
     defer allocator.free(input);
     var readTime = timer.lap();
     readTime -= readTime % std.time.ns_per_us;

@@ -12,6 +12,8 @@ const stderr = std.io.getStdErr().writer();
 var bw = std.io.bufferedWriter(std.io.getStdOut().writer());
 const stdout = bw.writer();
 
+const maxFileSize = 1_000_000;
+
 var resultsBuf: [2048]u8 = undefined;
 var fba = std.heap.FixedBufferAllocator.init(&resultsBuf);
 pub const resultAllocator = fba.allocator();
@@ -58,19 +60,12 @@ fn runSolution(allocator: std.mem.Allocator, solution: Solution) !void {
     const day = solution.day;
 
     var timer = try Timer.start();
-    var buf: [32]u8 = undefined;
-    var fileName = try std.fmt.bufPrint(&buf, "resources/inputs/{}/day{:0>2}.txt", .{ year, day });
-    const inputFile = std.fs.cwd().openFile(fileName, .{}) catch |err| {
-        try stderr.print("Could not open file {s}\n", .{fileName});
-        return err;
-    };
-    defer inputFile.close();
-
-    const content = try inputFile.readToEndAlloc(allocator, std.math.maxInt(usize));
+    const input = try readInputFile(allocator, year, day);
+    defer allocator.free(input);
     var readTime = timer.lap();
     readTime -= readTime % std.time.ns_per_us;
 
-    const res = try solution.run(content);
+    const res = try solution.run(input);
     var runTime = timer.read();
     runTime -= runTime % std.time.ns_per_us;
 
@@ -82,6 +77,17 @@ fn runSolution(allocator: std.mem.Allocator, solution: Solution) !void {
         std.fmt.fmtDuration(runTime),
         std.fmt.fmtDuration(readTime + runTime),
     });
+}
+
+fn readInputFile(allocator: std.mem.Allocator, year: u32, day: u32) ![]const u8 {
+    var buf: [32]u8 = undefined;
+    var fileName = try std.fmt.bufPrint(&buf, "resources/inputs/{}/day{:0>2}.txt", .{ year, day });
+    errdefer stderr.print("Could not open file {s}\n", .{fileName}) catch {};
+
+    const inputFile = try std.fs.cwd().openFile(fileName, .{});
+    defer inputFile.close();
+
+    return try inputFile.readToEndAlloc(allocator, maxFileSize);
 }
 
 fn printResult(result: ResultVal, part: usize) !void {

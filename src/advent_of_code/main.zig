@@ -67,15 +67,21 @@ fn runSolution(allocator: std.mem.Allocator, solution: Solution) !void {
     defer inputFile.close();
 
     const content = try inputFile.readToEndAlloc(allocator, std.math.maxInt(usize));
-    const readTime = timer.lap() / std.time.ns_per_us;
+    var readTime = timer.lap();
+    readTime -= readTime % std.time.ns_per_us;
 
     const res = try solution.run(content);
-    const runTime = timer.read() / std.time.ns_per_us;
+    var runTime = timer.read();
+    runTime -= runTime % std.time.ns_per_us;
 
     try stdout.print("Year {} day {}\n", .{ year, day });
     try printResult(res.part1, 1);
     try printResult(res.part2, 2);
-    try stdout.print("Took {} + {} = {}µs to read / run\n", .{ readTime, runTime, readTime + runTime });
+    try stdout.print("Took {} + {} = {} to read / run\n", .{
+        std.fmt.fmtDuration(readTime),
+        std.fmt.fmtDuration(runTime),
+        std.fmt.fmtDuration(readTime + runTime),
+    });
 }
 
 fn printResult(result: ResultVal, part: usize) !void {

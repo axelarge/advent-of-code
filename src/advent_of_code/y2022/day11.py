@@ -1,5 +1,4 @@
 import re
-from collections import Counter
 from math import prod
 
 F = open("resources/inputs/2022/day11.txt").read()
@@ -18,7 +17,7 @@ g = prod(m[2] for m in monkeys)
 
 def solve(part1):
     inventory = [list(m[0]) for m in monkeys]
-    times = Counter()
+    times = [0] * len(monkeys)
     for _ in range(20 if part1 else 10000):
         for i, (_, ops, test, true, false) in enumerate(monkeys):
             items = inventory[i]
@@ -32,7 +31,7 @@ def solve(part1):
                     item = item // 3
                 item = item % g
                 inventory[false if item % test else true].append(item)
-    return prod(v for _, v in times.most_common(2))
+    return prod(sorted(times)[-2:])
 
 
 p1 = solve(True)

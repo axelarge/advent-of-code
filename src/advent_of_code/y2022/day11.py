@@ -21,9 +21,8 @@ def solve(part1):
     for _ in range(20 if part1 else 10000):
         for i, (_, ops, test, true, false) in enumerate(monkeys):
             items = inventory[i]
-            while items:
+            for item in items:
                 times[i] += 1
-                item = items.pop(0)
                 a = item if ops[0] == "old" else ops[0]
                 b = item if ops[2] == "old" else ops[2]
                 item = a * b if ops[1] == "*" else a + b
@@ -31,6 +30,7 @@ def solve(part1):
                     item = item // 3
                 item = item % g
                 inventory[false if item % test else true].append(item)
+            items.clear()
     return prod(sorted(times)[-2:])
 
 

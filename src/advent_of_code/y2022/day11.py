@@ -8,7 +8,7 @@ monkeys = []
 for raw in F.split("\n\n"):
     lines = raw.splitlines()
     monkeys.append((tuple(map(int, re.findall(r"\d+", lines[1]))),
-                    lines[2].split(" = ")[1],
+                    [int(x) if x.isnumeric() else x for x in lines[2].split(" = ")[1].split()],
                     int(re.search(r"\d+", lines[3])[0]),
                     int(re.search(r"\d+", lines[4])[0]),
                     int(re.search(r"\d+", lines[5])[0])))
@@ -25,7 +25,9 @@ def solve(part1):
             while items:
                 times[i] += 1
                 item = items.pop(0)
-                item = eval(ops.replace("old", str(item)))
+                a = item if ops[0] == "old" else ops[0]
+                b = item if ops[2] == "old" else ops[2]
+                item = a * b if ops[1] == "*" else a + b
                 if part1:
                     item = item // 3
                 item = item % g

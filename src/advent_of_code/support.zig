@@ -54,3 +54,8 @@ pub fn BitSet(comptime T: type) type {
         }
     };
 }
+
+pub fn resizeZFill(comptime T: type, list: *std.ArrayList(T), n: usize) !void {
+    if (list.items.len >= n) return;
+    try list.appendNTimes(0, n - list.items.len + 1);
+}

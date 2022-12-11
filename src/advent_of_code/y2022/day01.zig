@@ -28,11 +28,6 @@ fn run(input: []const u8) !Result {
     return Result.of(max[0], max[0] + max[1] + max[2]);
 }
 
-fn compareFn(context: void, a: u32, b: u32) std.math.Order {
-    _ = context;
-    return std.math.order(b, a);
-}
-
 test "2022.01 sample" {
     const data =
         \\1000

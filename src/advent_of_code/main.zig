@@ -8,6 +8,8 @@ pub const Result = support.Result;
 pub const Solution = support.Solution;
 
 const Timer = std.time.Timer;
+const fmtDuration = std.fmt.fmtDuration;
+
 const stderr = std.io.getStdErr().writer();
 var bw = std.io.bufferedWriter(std.io.getStdOut().writer());
 const stdout = bw.writer();
@@ -47,8 +49,7 @@ pub fn main() !void {
             try runSolution(allocator, solution, false);
             try stdout.print("\n", .{});
         }
-        const elapsed = timer.read() / std.time.ns_per_us;
-        try stdout.print("Total time: {}µs\n", .{elapsed});
+        try stdout.print("Total time: {}\n", .{fmtDuration(lap(&timer))});
     } else {
         try printUsage();
     }
@@ -76,21 +77,24 @@ fn runSolution(allocator: std.mem.Allocator, solution: Solution, useStdIn: bool)
         false => try readInputFile(allocator, year, day),
     };
     defer allocator.free(input);
-    var readTime = timer.lap();
-    readTime -= readTime % std.time.ns_per_us;
+    var readTime = lap(&timer);
 
     const res = try solution.run(input);
-    var runTime = timer.read();
-    runTime -= runTime % std.time.ns_per_us;
+    var runTime = lap(&timer);
 
     try stdout.print("Year {} day {}\n", .{ year, day });
     try printResult(res.part1, 1);
     try printResult(res.part2, 2);
     try stdout.print("Took {} + {} = {} to read / run\n", .{
-        std.fmt.fmtDuration(readTime),
-        std.fmt.fmtDuration(runTime),
-        std.fmt.fmtDuration(readTime + runTime),
+        fmtDuration(readTime),
+        fmtDuration(runTime),
+        fmtDuration(readTime + runTime),
     });
+}
+
+fn lap(timer: *Timer) u64 {
+    const time = timer.lap();
+    return time - time % std.time.ns_per_us;
 }
 
 fn readInputFile(allocator: std.mem.Allocator, year: u32, day: u32) ![]const u8 {

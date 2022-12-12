@@ -2,7 +2,8 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clj-http.client :as http])
-  (:import (java.security MessageDigest)
+  (:import (clojure.lang PersistentQueue)
+           (java.security MessageDigest)
            (java.time Instant ZoneId)
            (java.time.format DateTimeFormatter)))
 
@@ -72,6 +73,9 @@
     (str
       (apply str (take (- len (count s)) (cycle pad)))
       s)))
+
+(defn queue [& args]
+  (into PersistentQueue/EMPTY args))
 
 (defn remove-at [xs i]
   (into (subvec xs 0 i) (subvec xs (inc i))))

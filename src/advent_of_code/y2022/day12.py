@@ -3,15 +3,15 @@ from collections import deque
 F = open("resources/inputs/2022/day12.txt").read().splitlines()
 
 G = {}
-start = None
-end = None
+S = None
+E = None
 for y, row in enumerate(F):
     for x, c in enumerate(row):
         if c == "S":
-            start = (x, y)
+            S = (x, y)
             c = "a"
         elif c == "E":
-            end = (x, y)
+            E = (x, y)
             c = "z"
         G[(x, y)] = c
 
@@ -40,10 +40,10 @@ def solve(start, is_end, reachable):
                 q.append((pos1, n + 1))
 
 
-part1 = solve(start, lambda pos: pos == end, lambda v1, v2: v1 + 1 >= v2)
+part1 = solve(S, lambda pos: pos == E, lambda v1, v2: v1 + 1 >= v2)
 print(part1)
 assert part1 == 520
 
-part2 = solve(end, lambda pos: G[pos] == "a", lambda v2, v1: v1 + 1 >= v2)
+part2 = solve(E, lambda pos: G[pos] == "a", lambda v2, v1: v1 + 1 >= v2)
 print(part2)
 assert part2 == 508

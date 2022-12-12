@@ -16,16 +16,16 @@ for y, row in enumerate(F):
         G[(x, y)] = c
 
 
-def neighbors(pos):
+def neighbors(pos, reachable):
     v1 = G[pos]
     for dx, dy in ((-1, 0), (+1, 0), (0, -1), (0, +1)):
         p = (pos[0] + dx, pos[1] + dy)
         v2 = G.get(p)
-        if v2 and ord(v1) + 1 >= ord(v2):
+        if v2 and reachable(ord(v1), ord(v2)):
             yield p
 
 
-def solve(start):
+def solve(start, is_end, reachable):
     q = deque([(start, 0)])
     seen = set()
     while q:
@@ -33,18 +33,17 @@ def solve(start):
         if pos in seen:
             continue
         seen.add(pos)
-        if pos == end:
+        if is_end(pos):
             return n
-        for pos1 in neighbors(pos):
+        for pos1 in neighbors(pos, reachable):
             if pos1 not in seen:
                 q.append((pos1, n + 1))
 
 
-part1 = solve(start)
+part1 = solve(start, lambda pos: pos == end, lambda v1, v2: v1 + 1 >= v2)
 print(part1)
 assert part1 == 520
 
-# TODO - Reuse data from part 1
-part2 = min(filter(None, (solve(pos) for pos, c in G.items() if c == "a")))
+part2 = solve(end, lambda pos: G[pos] == "a", lambda v2, v1: v1 + 1 >= v2)
 print(part2)
 assert part2 == 508

@@ -30,13 +30,11 @@ def solve(start, is_end, reachable):
     seen = set()
     while q:
         pos, n = q.popleft()
-        if pos in seen:
-            continue
-        seen.add(pos)
-        if is_end(pos):
-            return n
-        for pos1 in neighbors(pos, reachable):
-            if pos1 not in seen:
+        if pos not in seen:
+            if is_end(pos):
+                return n
+            seen.add(pos)
+            for pos1 in neighbors(pos, reachable):
                 q.append((pos1, n + 1))
 
 

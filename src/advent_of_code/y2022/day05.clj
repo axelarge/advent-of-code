@@ -9,15 +9,10 @@
     [(->> stacks
           transpose
           (partition-all 4)
-          (mapv #(->> %
-                      second
-                      (drop-while #{\space})
-                      reverse
-                      rest
-                      vec)))
+          (mapv #(->> % second (drop-while #{\space}) reverse rest vec)))
      (->> moves
           (map find-ints)
-          (map (fn [[n from to]] [n (dec from) (dec to)])))]))
+          (map (juxtv [nil dec dec])))]))
 
 (defn solve [chunk-f input]
   (let [[stacks moves] (parse input)]

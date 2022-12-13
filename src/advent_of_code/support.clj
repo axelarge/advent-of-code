@@ -84,7 +84,15 @@
   (vec (concat (subvec xs 0 i) [x] (subvec xs i))))
 
 (defn transpose [m]
-  (vec (apply map vector m)))
+  (apply mapv vector m))
+
+(defn juxtv
+  ([fs]
+   (partial juxtv fs))
+  ([fs xs]
+   (mapv (fn [f x] (if f (f x) x))
+         fs
+         xs)))
 
 (defn map2 [f coll]
   (map (partial map f) coll))
@@ -224,6 +232,17 @@
         dy [-1 0 1]
         :when (not= dx dy 0)]
     [(+ x dx) (+ y dy)]))
+
+(defn dijkstra [start end? neighbors]
+  (loop [queue (queue [start 0])
+         seen #{}]
+    (when-let [[pos n] (peek queue)]
+      (cond (seen pos) (recur (pop queue) seen)
+            (end? pos) n
+            :else (recur (->> (neighbors pos)
+                              (map #(vector % (inc n)))
+                              (into (pop queue)))
+                         (conj seen pos))))))
 
 (defn connected-nodes
   ([neighbors from] (connected-nodes neighbors from #{}))

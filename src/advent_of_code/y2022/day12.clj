@@ -20,26 +20,15 @@
     (when-let [to-val (normalize (get-in grid to))]
       (>= (int from-val) (dec (int to-val))))))
 
-(defn dijkstra [start end? can-go?]
-  (loop [queue (queue [start 0])
-         seen #{}]
-    (when-let [[pos n] (peek queue)]
-      (cond (seen pos) (recur (pop queue) seen)
-            (end? pos) n
-            :else (recur (->> (neighbors4 pos)
-                              (filter (partial can-go? pos))
-                              (map #(vector % (inc n)))
-                              (into (pop queue)))
-                         (conj seen pos))))))
+(defn solve [input start end? can-go?]
+  (let [grid (parse input)]
+    (dijkstra (find-pos grid #{start})
+              #(end? (get-in grid %))
+              #(->> (neighbors4 %)
+                    (filter (partial can-go? grid %))))))
 
 (defn solve1 [input]
-  (let [grid (parse input)]
-    (dijkstra (find-pos grid #{\S})
-              #(= (get-in grid %) \E)
-              (partial can-go? grid))))
+  (solve input \S #{\E} can-go?))
 
 (defn solve2 [input]
-  (let [grid (parse input)]
-    (dijkstra (find-pos grid #{\E})
-              #(#{\S \a} (get-in grid %))
-              (fn [from to] (can-go? grid to from)))))
+  (solve input \E #{\S \a} (fn [g from to] (can-go? g to from))))

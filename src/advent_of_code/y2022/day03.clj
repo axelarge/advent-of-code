@@ -10,22 +10,14 @@
     (- (int c) (int \A) -27)
     (- (int c) (int \a) -1)))
 
+(defn common [sets]
+  (->> sets (map set) (apply set/intersection) first score))
+
+(defn solve [input f]
+  (->> input str/split-lines f (map common) (reduce +)))
+
 (defn solve1 [input]
-  (->> input
-       str/split-lines
-       (map (fn [line]
-              (->> line
-                   (partition (/ (count line) 2))
-                   (map set)
-                   (apply set/intersection)
-                   first
-                   score)))
-       (reduce +)))
+  (solve input (partial map #(partition (/ (count %) 2) %))))
 
 (defn solve2 [input]
-  (->> input
-       str/split-lines
-       (map set)
-       (partition 3)
-       (map (comp score first (partial apply set/intersection)))
-       (reduce +)))
+  (solve input (partial partition 3)))

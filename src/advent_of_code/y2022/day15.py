@@ -1,12 +1,15 @@
 import re
 
 F = open("resources/inputs/2022/day15.txt").read().splitlines()
-D = [tuple(map(int, re.findall(r"-?\d+", line))) for line in F]
+D = []
+for line in F:
+    sx, sy, bx, by = map(int, re.findall(r"-?\d+", line))
+    D.append((sx, sy, abs(sx - bx) + abs(sy - by)))
 
 Y = 2000000
 r = []
-for sx, sy, bx, by in D:
-    m = abs(sx - bx) + abs(sy - by) - abs(Y - sy)
+for sx, sy, d in D:
+    m = d - abs(Y - sy)
     if m > 0:
         r.append([sx - m, sx + m])
 r.sort()
@@ -21,8 +24,8 @@ assert part1 == 5564017
 
 
 def shells():
-    for sx, sy, bx, by in D:
-        m = abs(sx - bx) + abs(sy - by) + 1
+    for sx, sy, d in D:
+        m = d + 1
         # this is 3x faster than 4 yields in one loop
         for i in range(m):
             yield sx - m + i, sy + i
@@ -36,13 +39,13 @@ def shells():
 
 part2 = None
 R = 4000000
-minx = max(0, min(sx for sx, sy, bx, by in D))
-maxx = min(R, max(sx for sx, sy, bx, by in D))
-miny = max(0, min(sy for sx, sy, bx, by in D))
-maxy = min(R, max(sy for sx, sy, bx, by in D))
+minx = max(0, min(sx for sx, sy, _ in D))
+maxx = min(R, max(sx for sx, sy, _ in D))
+miny = max(0, min(sy for sx, sy, _ in D))
+maxy = min(R, max(sy for sx, sy, _ in D))
 for x, y in shells():
     if minx <= x <= maxx and miny <= y <= maxy:
-        if all(abs(sx - x) + abs(sy - y) > abs(sx - bx) + abs(sy - by) for sx, sy, bx, by in D):
+        if all(abs(sx - x) + abs(sy - y) > d for sx, sy, d in D):
             part2 = x * 4000000 + y
             break
 print(part2)

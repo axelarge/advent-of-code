@@ -83,6 +83,8 @@
 (defn insert-at [xs i x]
   (vec (concat (subvec xs 0 i) [x] (subvec xs i))))
 
+(def indexed (partial map-indexed vector))
+
 (defn transpose [m]
   (apply mapv vector m))
 
@@ -142,6 +144,11 @@
   (reduce (fn [_ x] (when (pred x) (reduced x)))
           nil
           coll))
+
+(defn intersects? [a b]
+  (if (< (count a) (count b))
+    (some b a)
+    (some a b)))
 
 (defn str-index-of
   ([^String s ^String match]

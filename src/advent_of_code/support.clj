@@ -240,6 +240,25 @@
         :when (not= dx dy 0)]
     [(+ x dx) (+ y dy)]))
 
+(defn neighbors3d6 [[x y z]]
+  (for [[dx dy dz] [[-1 0 0] [1 0 0] [0 -1 0] [0 1 0] [0 0 -1] [0 0 1]]]
+    [(+ x dx) (+ y dy) (+ z dz)]))
+
+(defn bounds3d [points]
+  (let [minx (apply min (map #(nth % 0) points))
+        maxx (apply max (map #(nth % 0) points))
+        miny (apply min (map #(nth % 1) points))
+        maxy (apply max (map #(nth % 1) points))
+        minz (apply min (map #(nth % 2) points))
+        maxz (apply max (map #(nth % 2) points))]
+    [minx maxx miny maxy minz maxz]))
+
+(defn bounds3d-contain? [bounds [x y z]]
+  (let [[minx maxx miny maxy minz maxz] bounds]
+    (and (<= minx x maxx)
+         (<= miny y maxy)
+         (<= minz z maxz))))
+
 (defn dijkstra [start end? neighbors]
   (loop [queue (queue [start 0])
          seen #{}]

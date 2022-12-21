@@ -1,6 +1,4 @@
-import functools
 import operator
-from z3 import z3
 
 F = open("resources/inputs/2022/day21.txt").read().splitlines()
 NUMS = {}
@@ -15,35 +13,42 @@ for line in F:
         DEPS[name] = words
 
 
-@functools.cache
-def resolve(name):
+def simplify(name, unknown=None):
+    if name == unknown:
+        return "X"
     if name in NUMS:
         return NUMS[name]
     else:
         a, op, b = DEPS[name]
-        return OPS[op](resolve(a), resolve(b))
+        a = simplify(a, unknown)
+        b = simplify(b, unknown)
+        if type(a) == int and type(b) == int:
+            return OPS[op](a, b)
+        else:
+            return a, op, b
 
 
-part1 = resolve("root")
+def must_eq(expr, target):
+    if type(expr) == int and type(target) != int:
+        return must_eq(target, expr)
+    if expr == "X":
+        return target
+    a, op, b = expr
+    match op, type(a) == int:
+        case "+", 1: return must_eq(b, target - a)
+        case "+", 0: return must_eq(a, target - b)
+        case "-", 1: return must_eq(b, a - target)
+        case "-", 0: return must_eq(a, target + b)
+        case "*", 1: return must_eq(b, target // a)
+        case "*", 0: return must_eq(a, target // b)
+        case "/", 1: return must_eq(b, a / target)
+        case "/", 0: return must_eq(a, target * b)
+
+part1 = simplify("root")
 print(part1)
 assert part1 == 54703080378102
 
-V = {name: z3.Int(name) for name in list(NUMS.keys()) + list(DEPS.keys())}
-s = z3.Optimize()
-for name in NUMS:
-    if name != "humn":
-        s.add(V[name] == NUMS[name])
-for name in DEPS:
-    a, op, b = DEPS[name]
-    if name == "root":
-        s.add(V[a] == V[b])
-    elif op == "/":
-        s.add(V[name] == V[a] / V[b])
-    else:
-        s.add(V[name] == OPS[op](V[a], V[b]))
-humn = V["humn"]
-s.minimize(humn)
-s.check()
-part2 = s.model()[humn].as_long()
+left, _, right = DEPS["root"]
+part2 = must_eq(simplify(left, "humn"), simplify(right, "humn"))
 print(part2)
 assert part2 == 3952673930912

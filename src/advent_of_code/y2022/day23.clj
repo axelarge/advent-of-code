@@ -4,19 +4,17 @@
 (def input (get-input 2022 23))
 
 (def moves
-  [[[0 -1] [[-1 -1] [0 -1] [+1 -1]]]
-   [[0 +1] [[-1 +1] [0 +1] [+1 +1]]]
-   [[-1 0] [[-1 -1] [-1 0] [-1 +1]]]
-   [[+1 0] [[+1 -1] [+1 0] [+1 +1]]]])
+  [[[0 -1] [-1 -1] [+1 -1]]
+   [[0 +1] [-1 +1] [+1 +1]]
+   [[-1 0] [-1 -1] [-1 +1]]
+   [[+1 0] [+1 -1] [+1 +1]]])
 
 (defn step [grid moves pos]
   (or (when (some grid (neighbors8 pos))
         (->> moves
-             (some (fn [[move-delta neighbor-deltas]]
-                     (when (->> neighbor-deltas
-                                (map (partial vec+ pos))
-                                (not-any? grid))
-                       (vec+ pos move-delta))))))
+             (some (fn [deltas]
+                     (when (not-any? #(grid (vec+ pos %)) deltas)
+                       (vec+ pos (first deltas)))))))
       pos))
 
 (defn states [grid]

@@ -41,6 +41,6 @@
                             (when (> v 1) k)))
                     set)]
     (->> claims
-         (find-where (fn [{:keys [covered]}]
-                       (not-any? agreed covered)))
+         (first-where (fn [{:keys [covered]}]
+                        (not-any? agreed covered)))
          :id)))

@@ -44,6 +44,6 @@
   (->> input
        str/split-lines
        pairs
-       (find-where #(= 1 (differ-by %)))
+       (first-where #(= 1 (differ-by %)))
        equal-by
        (apply str)))

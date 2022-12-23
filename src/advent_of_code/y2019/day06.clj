@@ -47,7 +47,7 @@
     []
     #_when (get-in deep-children [from to])
     (let [child (->> (get direct-children from)
-                     (find-where #(get-in deep-children [% to])))]
+                     (first-where #(get-in deep-children [% to])))]
       (into [child] (find-path args child to)))
     :else
     (let [parent (get parents from)]

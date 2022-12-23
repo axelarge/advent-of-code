@@ -10,10 +10,10 @@
   (->> input
        (parse)
        (window 26)
-       (find-where (fn [nums]
-                     (let [n (peek nums)
-                           others (set (pop nums))]
-                       (not-any? #(others (- n %)) others))))
+       (first-where (fn [nums]
+                      (let [n (peek nums)
+                            others (set (pop nums))]
+                        (not-any? #(others (- n %)) others))))
        (last)))
 
 (defn solve2 [input]

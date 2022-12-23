@@ -16,6 +16,6 @@
        (parse)
        (reductions +)
        (map-indexed vector)
-       (find-where (comp neg? second))
+       (first-where (comp neg? second))
        (first)
        (inc)))

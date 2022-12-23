@@ -49,12 +49,12 @@
 (defn solve1 [input]
   (let [boss (parse input)]
     (->> (gear-options items)
-         (find-where (partial win? boss))
+         (first-where (partial win? boss))
          :cost)))
 
 (defn solve2 [input]
   (let [boss (parse input)]
     (->> (gear-options items)
          (reverse)
-         (find-where (complement (partial win? boss)))
+         (first-where (complement (partial win? boss)))
          :cost)))

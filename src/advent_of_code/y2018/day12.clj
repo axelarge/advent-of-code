@@ -103,7 +103,7 @@
                     parse
                     pad
                     (iterate step)
-                    (find-where already-seen?))
+                    (first-where already-seen?))
         prev (get-in cyclic [:seen (:pots cyclic)])
         d-offset (- (:offset cyclic) (:offset prev))
         period (- (:gen cyclic) (:gen prev))

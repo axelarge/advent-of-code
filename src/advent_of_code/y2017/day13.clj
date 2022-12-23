@@ -22,6 +22,6 @@
 
 (defn solve2 [input]
   (let [parsed (parse input)]
-    (find-where (fn [delay]
-                  (not-any? #(severity delay %) parsed))
-                (next (range)))))
+    (first-where (fn [delay]
+                   (not-any? #(severity delay %) parsed))
+                 (next (range)))))

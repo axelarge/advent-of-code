@@ -15,7 +15,7 @@
 
 (defn redistribute [m]
   (let [size (count m)
-        n (find-where #(zero? (rem size %)) [2 3])]
+        n (first-where #(zero? (rem size %)) [2 3])]
     (->> m
          (partition n)
          (mapv (fn [rows-in-chunk]

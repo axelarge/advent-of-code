@@ -41,7 +41,7 @@
         lookup (make-lookup grid lookup)]
     (->> (iterate (partial step limit lookup) grid)
          (window)
-         (find-where (fn [[a b]] (= a b)))
+         (first-where (fn [[a b]] (= a b)))
          (first)
          (apply concat)
          (count-where #{\#}))))

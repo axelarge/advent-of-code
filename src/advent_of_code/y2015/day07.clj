@@ -33,7 +33,7 @@
 (defn run [wires steps]
   (loop [steps steps
          wires wires]
-    (if-let [step (find-where #(every? wires (:deps %)) steps)]
+    (if-let [step (first-where #(every? wires (:deps %)) steps)]
       (recur (disj steps step)
              (do-step wires step))
       (mapm #(mod % 65536) wires))))

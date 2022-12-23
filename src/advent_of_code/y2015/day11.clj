@@ -47,7 +47,7 @@
   (->> pass
        (iterate inc-pass)
        (next)
-       (find-where valid?)))
+       (first-where valid?)))
 
 (defn solve1 [input]
   (->> input

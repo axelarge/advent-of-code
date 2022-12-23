@@ -158,11 +158,6 @@
     (when (nil? t)
       h)))
 
-(defn find-where [pred coll]
-  (reduce (fn [_ x] (when (pred x) (reduced x)))
-          nil
-          coll))
-
 (defn intersects? [a b]
   (if (< (count a) (count b))
     (some b a)
@@ -181,6 +176,11 @@
   ([s from i]
    (when-let [i (str-index-of s from i)]
      (cons i (lazy-seq (str-indexes s from (inc i)))))))
+
+(defn first-where [pred coll]
+  (reduce (fn [_ x] (when (pred x) (reduced x)))
+          nil
+          coll))
 
 (defn index-where [pred coll]
   (if (associative? coll)

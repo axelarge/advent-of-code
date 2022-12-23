@@ -144,13 +144,13 @@
 
 (defn result [state]
   (->> (run state)
-       (find-where :halt?)))
+       (first-where :halt?)))
 
 (defn await-output [state]
   (let [output (:output state)]
     (->> (run state)
-         (find-where #(or (:halt? %)
-                          (not= output (:output %)))))))
+         (first-where #(or (:halt? %)
+                           (not= output (:output %)))))))
 
 (defn display [{:keys [mem pos] :as state}]
   (let [ks (sort (keys mem))]

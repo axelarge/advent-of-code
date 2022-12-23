@@ -28,7 +28,7 @@
 
 (defn run [state]
   (->> (iterate step state)
-       (find-where reduced?)
+       (first-where reduced?)
        (unreduced)))
 
 (defn solve1 [input]
@@ -42,5 +42,5 @@
                            (= :jmp op) (assoc-in state [:code i 0] :nop)
                            (= :nop op) (assoc-in state [:code i 0] :jmp))))
          (map run)
-         (find-where :finished?)
+         (first-where :finished?)
          :acc)))

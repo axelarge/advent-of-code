@@ -28,7 +28,7 @@
 (defn find-match [check aunts]
   (let [pred (partial matches? check fingerprint)]
     (->> aunts
-         (find-where (comp pred :fingerprint))
+         (first-where (comp pred :fingerprint))
          :aunt)))
 
 (defn solve1 [input]

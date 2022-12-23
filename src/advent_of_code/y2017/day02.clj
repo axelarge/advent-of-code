@@ -11,7 +11,7 @@
 (defn divisible-pair [row]
   (loop [[x & xs] (sort row)]
     (when xs
-      (if-let [dividend (find-where #(zero? (rem % x)) xs)]
+      (if-let [dividend (first-where #(zero? (rem % x)) xs)]
         (/ dividend x)
         (recur xs)))))
 

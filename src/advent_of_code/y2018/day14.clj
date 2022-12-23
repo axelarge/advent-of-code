@@ -42,7 +42,7 @@
   (let [n (parse-int input)]
     (->> init-state
          (iterate step)
-         (find-where #(-> % :recipes count (>= (+ n 10))))
+         (first-where #(-> % :recipes count (>= (+ n 10))))
          :recipes
          (drop n)
          (take 10)
@@ -52,7 +52,7 @@
   (let [n (mapv (comp parse-int str) (str input))]
     (->> init-state
          (iterate step)
-         (find-where (partial has? n))
+         (first-where (partial has? n))
          :recipes
          (apply str)
          (#(str/last-index-of % (str input))))))

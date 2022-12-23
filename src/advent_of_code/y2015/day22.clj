@@ -90,7 +90,7 @@
     (loop []
       (when-let [state (.poll queue)]
         (let [states (keep (partial turn state) spell-priority)]
-          (or (find-where :win? states)
+          (or (first-where :win? states)
               (do
                 (doseq [new-s states]
                   (.add queue new-s))

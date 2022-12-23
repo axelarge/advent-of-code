@@ -52,7 +52,7 @@
                         (apply merge-with clojure.set/intersection))
         ops (loop [ops {}
                    candidates candidates]
-              (if-let [[k op] (find-where (comp single val) candidates)]
+              (if-let [[k op] (first-where (comp single val) candidates)]
                 (let [op (first op)]
                   (recur (assoc ops k op)
                          (mapm #(disj % op) candidates)))

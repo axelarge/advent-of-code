@@ -77,6 +77,8 @@
 (defn queue [& args]
   (into PersistentQueue/EMPTY args))
 
+(def conj-set (fnil conj #{}))
+
 (defn remove-at [xs i]
   (into (subvec xs 0 i) (subvec xs (inc i))))
 

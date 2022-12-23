@@ -4,18 +4,20 @@
 (def input (get-input 2018 20))
 
 (defn parse [input]
-  (first
-    (reduce (fn [[edges stack pos] c]
-              (if-let [delta ({\N [0 -1] \S [0 1] \E [1 0] \W [-1 0]} c)]
-                (let [pos1 (vec+ pos delta)]
-                  [(update edges pos (fnil conj #{}) pos1) stack pos1])
-                (case c
-                  \| [edges stack (peek stack)]
-                  \( [edges (conj stack pos) pos]
-                  \) [edges (pop stack) pos]
-                  [edges stack pos])))
-            [{} [[0 0]] [0 0]]
-            input)))
+  (loop [input (seq input)
+         edges {}
+         stack [[0 0]]
+         pos [0 0]]
+    (if-some [[c & t] input]
+      (if-let [delta ({\N [0 -1] \S [0 1] \E [1 0] \W [-1 0]} c)]
+        (let [pos1 (vec+ pos delta)]
+          (recur t (update edges pos conj-set pos1) stack pos1))
+        (case c
+          \| (recur t edges stack (peek stack))
+          \( (recur t edges (conj stack pos) pos)
+          \) (recur t edges (pop stack) pos)
+          (recur t edges stack pos)))
+      edges)))
 
 (defn solve1 [input]
   (dfs (fn [depth _] (inc depth))

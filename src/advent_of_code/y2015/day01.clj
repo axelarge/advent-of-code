@@ -7,15 +7,7 @@
   (map {\( +1 \) -1} s))
 
 (defn solve1 [input]
-  (->> input
-       (parse)
-       (reduce +)))
+  (reduce + (parse input)))
 
 (defn solve2 [input]
-  (->> input
-       (parse)
-       (reductions +)
-       (map-indexed vector)
-       (first-where (comp neg? second))
-       (first)
-       (inc)))
+  (->> input parse (reductions +) (index-where neg?) inc))

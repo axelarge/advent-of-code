@@ -123,6 +123,7 @@ const solutions = [_]Solution{
     y2022.day05.Solution,
     y2022.day06.Solution,
     y2022.day11.Solution,
+    y2022.day23.Solution,
     @import("y2020/day15.zig").Solution,
 };
 

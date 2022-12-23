@@ -55,6 +55,23 @@ pub fn BitSet(comptime T: type) type {
     };
 }
 
+pub const XY = struct {
+    x: i32,
+    y: i32,
+
+    pub inline fn of(x: i32, y: i32) XY {
+        return .{ .x = x, .y = y };
+    }
+
+    pub inline fn add(self: XY, x: i32, y: i32) XY {
+        return .{ .x = self.x + x, .y = self.y + y };
+    }
+
+    pub fn addXY(self: XY, other: XY) XY {
+        return add(self, other.x, other.y);
+    }
+};
+
 pub fn resizeZFill(comptime T: type, list: *std.ArrayList(T), n: usize) !void {
     if (list.items.len >= n) return;
     try list.appendNTimes(0, n - list.items.len + 1);

@@ -3,20 +3,11 @@
 
 (def input (get-input 2022 23))
 
-(defn parse [input]
-  (set (for [[y line] (indexed (split-lines input))
-             [x c] (indexed line)
-             :when (= c \#)]
-         [x y])))
-
 (def moves
   [[[0 -1] [[-1 -1] [0 -1] [+1 -1]]]
    [[0 +1] [[-1 +1] [0 +1] [+1 +1]]]
    [[-1 0] [[-1 -1] [-1 0] [-1 +1]]]
    [[+1 0] [[+1 -1] [+1 0] [+1 +1]]]])
-
-(defn vec+ [[x1 y1] [x2 y2]]
-  [(+ x1 x2) (+ y1 y2)])
 
 (defn step [grid moves pos]
   (or (when (some grid (neighbors8 pos))
@@ -39,12 +30,12 @@
        (map first)))
 
 (defn solve1 [input]
-  (let [res (nth (states (parse input)) 10)
-        [minx maxx] (apply (juxt min max) (mapv first res))
-        [miny maxy] (apply (juxt min max) (mapv second res))]
+  (let [grid (-> input lines->set states (nth 10))
+        [minx maxx] (apply (juxt min max) (mapv first grid))
+        [miny maxy] (apply (juxt min max) (mapv second grid))]
     (- (* (- maxx minx -1)
           (- maxy miny -1))
-       (count res))))
+       (count grid))))
 
 (defn solve2 [input]
-  (->> input parse states window (take-while (partial apply not=)) count inc))
+  (->> input lines->set states window (take-while (partial apply not=)) count inc))

@@ -99,6 +99,18 @@
 (defn map2 [f coll]
   (map (partial map f) coll))
 
+(defn vec2+ [[x1 y1] [x2 y2]]
+  [(+ x1 x2) (+ y1 y2)])
+
+(defn vec3+ [[x1 y1 z1] [x2 y2 z2]]
+  [(+ x1 x2) (+ y1 y2) (+ z1 z2)])
+
+(defn vec+ [v1 v2]
+  (case (count v1)
+    2 (vec2+ v1 v2)
+    3 (vec3+ v1 v2)
+    (mapv + v1 v2)))
+
 (defn subv
   ([v start]
    (subv v start (count v)))
@@ -106,6 +118,12 @@
    (let [start (cond-> start (neg? start) (+ (count v)))
          end (cond-> end (neg? end) (+ (count v)))]
      (subvec v start end))))
+
+(defn lines->set [input]
+  (set (for [[y line] (indexed (split-lines input))
+             [x c] (indexed line)
+             :when (= c \#)]
+         [x y])))
 
 (defn map-grid [f grid]
   (->> grid

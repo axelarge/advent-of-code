@@ -277,6 +277,20 @@
          (<= miny y maxy)
          (<= minz z maxz))))
 
+(defn dfs
+  [down-f reduce-f init-pos init-state edges]
+  (loop [stack (list [init-pos init-state])
+         seen #{}
+         res init-state]
+    (if-let [[pos state] (peek stack)]
+      (recur (->> (get edges pos)
+                  (remove seen)
+                  (map #(vector % (down-f state %)))
+                  (into (pop stack)))
+             (conj seen pos)
+             (reduce-f res state))
+      res)))
+
 (defn dijkstra [start end? neighbors]
   (loop [queue (queue [start 0])
          seen #{}]

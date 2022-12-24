@@ -8,20 +8,16 @@ W = len(F[0]) - 2
 T = lcm(W, H)
 B = []
 DIR = {">": (1, 0), "<": (-1, 0), "^": (0, -1), "v": (0, 1)}
+D = list(DIR.values())
 for y, line in enumerate(F):
     for x, c in enumerate(line):
         if d := DIR.get(c):
-            B.append(((x, y), d))
+            B.append((x - 1, y - 1, *d))
 
 
 @functools.cache
 def blizzards_at(t):
-    res = set()
-    for (bx, by), (dx, dy) in B:
-        xx = 1 + (bx - 1 + dx * t) % W
-        yy = 1 + (by - 1 + dy * t) % H
-        res.add((xx, yy))
-    return res
+    return {(1 + (bx + dx * t) % W, 1 + (by + dy * t) % H) for bx, by, dx, dy in B}
 
 
 def occupied(pos, t):
@@ -38,7 +34,7 @@ def solve(t0, start, end):
             seen.add(state)
             if pos == end:
                 return t
-            for dx, dy in DIR.values():
+            for dx, dy in D:
                 pos1 = pos[0] + dx, pos[1] + dy
                 x1, y1 = pos1
                 if 0 < y1 <= H and 0 < x1 <= W or pos1 == end:

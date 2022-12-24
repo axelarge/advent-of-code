@@ -28,10 +28,10 @@ def solve(t0, start, end):
     q = deque([(t0, start)])
     seen = set()
     while q:
-        t, pos = q.popleft()
-        state = (t % T, pos)
+        state = q.popleft()
         if state not in seen:
             seen.add(state)
+            t, pos = state
             if pos == end:
                 return t
             for dx, dy in D:

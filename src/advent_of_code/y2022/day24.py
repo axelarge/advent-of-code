@@ -34,9 +34,10 @@ def solve(t0, start, end):
             t, pos = state
             if pos == end:
                 return t
+            x, y = pos
             for dx, dy in D:
-                pos1 = pos[0] + dx, pos[1] + dy
-                x1, y1 = pos1
+                x1, y1 = x + dx, y + dy
+                pos1 = x1, y1
                 if 0 < y1 <= H and 0 < x1 <= W or pos1 == end:
                     if not occupied(pos1, t + 1):
                         q.append((t + 1, pos1))

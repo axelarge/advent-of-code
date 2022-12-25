@@ -1,4 +1,5 @@
 from functools import cmp_to_key
+from json import loads
 from math import prod
 
 
@@ -18,7 +19,7 @@ def compare(a, b):
 
 
 F = open("resources/inputs/2022/day13.txt").read()
-pairs = [list(map(eval, pair.splitlines())) for pair in F.split("\n\n")]
+pairs = [list(map(loads, pair.splitlines())) for pair in F.split("\n\n")]
 
 part1 = sum(i for i, (a, b) in enumerate(pairs, 1) if compare(a, b) < 0)
 print(part1)

@@ -3,19 +3,18 @@ from math import prod
 
 
 def compare(a, b):
-    al = type(a) == list
-    bl = type(b) == list
-    if not al and not bl:
-        return a - b
-    elif al and not bl:
-        return compare(a, [b])
-    elif not al and bl:
-        return compare([a], b)
-    else:
-        for ax, bx in zip(a, b):
-            if c := compare(ax, bx):
-                return c
-        return len(a) - len(b)
+    match a, b:
+        case int(), int():
+            return a - b
+        case int(), list():
+            return compare([a], b)
+        case list(), int():
+            return compare(a, [b])
+        case list(), list():
+            for ax, bx in zip(a, b):
+                if c := compare(ax, bx):
+                    return c
+            return len(a) - len(b)
 
 
 F = open("resources/inputs/2022/day13.txt").read()

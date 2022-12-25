@@ -1,5 +1,4 @@
 import re
-from collections import Counter
 
 F = open("resources/inputs/2022/day15.txt").read().splitlines()
 D = []
@@ -28,17 +27,17 @@ part1 = sum(hi - lo for lo, hi in merge(r))
 print(part1)
 assert part1 == 5564017
 
-As, Bs, Cs, Ds = [Counter() for _ in range(4)]
+A1, A2, B1, B2 = [set() for _ in range(4)]
 for sx, sy, d in D:
     m = d + 1
     a = sx - sy  # diagonal /
     b = sx + sy  # diagonal \
-    As[a - m] += 1  # /.
-    Bs[b - m] += 1  # \.
-    Cs[a + m] += 1  # ./
-    Ds[b + m] += 1  # .\
-a = max(As, key=lambda k: As[k] * Cs[k])
-b = max(Bs, key=lambda k: Bs[k] * Ds[k])
+    A1.add(a - m)  # /.
+    A2.add(a + m)  # ./
+    B1.add(b - m)  # \.
+    B2.add(b + m)  # .\
+a = next(iter(A1 & A2))
+b = next(iter(B1 & B2))
 x = (a + b) // 2
 y = b - x
 part2 = x * 4000000 + y

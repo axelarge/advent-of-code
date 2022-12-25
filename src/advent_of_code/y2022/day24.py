@@ -1,5 +1,4 @@
 import functools
-from collections import deque
 from math import lcm
 
 F = open("resources/inputs/2022/day24.txt").read().splitlines()
@@ -24,14 +23,11 @@ def occupied(pos, t):
     return pos in blizzards_at(t % T)
 
 
-def solve(t0, start, end):
-    q = deque([(t0, start)])
-    seen = set()
-    while q:
-        state = q.popleft()
-        if state not in seen:
-            seen.add(state)
-            t, pos = state
+def solve(t, start, end):
+    current = [start]
+    while current:
+        next_ = set()
+        for pos in current:
             if pos == end:
                 return t
             x, y = pos
@@ -40,9 +36,11 @@ def solve(t0, start, end):
                 pos1 = x1, y1
                 if 0 < y1 <= H and 0 < x1 <= W or pos1 == end:
                     if not occupied(pos1, t + 1):
-                        q.append((t + 1, pos1))
+                        next_.add(pos1)
             if not occupied(pos, t + 1):
-                q.append((t + 1, pos))
+                next_.add(pos)
+        t += 1
+        current = next_
 
 
 start = (1, 0)

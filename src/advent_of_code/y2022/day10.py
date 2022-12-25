@@ -26,7 +26,6 @@ for line in F:
 print(part1)
 assert part1 == 12560
 
-print()
 for row in zip(*[iter(crt)] * 40):
     print("".join(row))
 

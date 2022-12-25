@@ -1,11 +1,11 @@
-import functools
-import operator
+from operator import add, sub, mul, truediv
+
 from z3 import z3
 
 F = open("resources/inputs/2022/day21.txt").read().splitlines()
 NUMS = {}
 DEPS = {}
-OPS = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
+OPS = {"+": add, "-": sub, "*": mul, "/": truediv}
 V = {}
 for line in F:
     name, *words = line.split()

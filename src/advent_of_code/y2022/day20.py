@@ -6,13 +6,8 @@ def mix(data, times=1):
         for xx in data:
             i = res.index(xx)
             x = xx[1]
-            ii = (i + x) % (l - 1)
             del res[i]
-            res.insert(ii, xx)
-            # for j in range(x % (l - 1)):
-            #     a = (i + j) % l
-            #     b = (i + j + 1) % l
-            #     res[a], res[b] = res[b], res[a]
+            res.insert((i + x) % (l - 1), xx)
     mixed = [xx[1] for xx in res]
     i = mixed.index(0)
     return sum(mixed[(i + d) % l] for d in [1000, 2000, 3000])

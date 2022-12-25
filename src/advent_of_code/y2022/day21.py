@@ -1,9 +1,9 @@
-import operator
+from operator import add, sub, mul, floordiv
 
 F = open("resources/inputs/2022/day21.txt").read().splitlines()
 NUMS = {}
 DEPS = {}
-OPS = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.floordiv}
+OPS = {"+": add, "-": sub, "*": mul, "/": floordiv}
 for line in F:
     name, *words = line.split()
     name = name[:-1]
@@ -43,6 +43,7 @@ def must_eq(expr, target):
         case "*", 0: return must_eq(a, target // b)
         case "/", 1: return must_eq(b, a / target)
         case "/", 0: return must_eq(a, target * b)
+
 
 part1 = simplify("root")
 print(part1)

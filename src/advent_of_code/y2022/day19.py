@@ -38,11 +38,9 @@ def max_geos(blueprint, time):
             best_ever = max(best, best_ever)
             return best
 
-        looked_at_bots = 0
         best = 0
         # build ore bot
         if ore >= ore_cost_ore and ore_bots < max_ore_cost and t > 2:
-            looked_at_bots += 1
             best = max(best, inner(t - 1,
                                    ore + ore_bots - ore_cost_ore,
                                    clay + clay_bots,
@@ -54,7 +52,6 @@ def max_geos(blueprint, time):
                                    geo_bots))
         # build clay bot
         if ore >= clay_cost_ore and clay_bots < obs_cost_clay and t > 3:
-            looked_at_bots += 1
             best = max(best, inner(t - 1,
                                    ore + ore_bots - clay_cost_ore,
                                    clay + clay_bots,
@@ -66,7 +63,6 @@ def max_geos(blueprint, time):
                                    geo_bots))
         # build obsidian bot
         if ore >= obs_cost_ore and clay >= obs_cost_clay and obs_bots < geo_cost_obs and t > 2:
-            looked_at_bots += 1
             best = max(best, inner(t - 1,
                                    ore + ore_bots - obs_cost_ore,
                                    clay + clay_bots - obs_cost_clay,

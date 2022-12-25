@@ -1,7 +1,4 @@
-from collections import deque
-
 F = open("resources/inputs/2022/day12.txt").read().splitlines()
-
 G = {}
 S = None
 E = None
@@ -26,16 +23,17 @@ def neighbors(pos, reachable):
 
 
 def solve(start, is_end, reachable):
-    q = deque([(start, 0)])
-    seen = set()
+    n, q, seen = 0, [start], set()
     while q:
-        pos, n = q.popleft()
-        if pos not in seen:
+        q1 = set()
+        for pos in q:
             if is_end(pos):
                 return n
             seen.add(pos)
             for pos1 in neighbors(pos, reachable):
-                q.append((pos1, n + 1))
+                q1.add(pos1)
+        q = q1 - seen
+        n += 1
 
 
 part1 = solve(S, lambda pos: pos == E, lambda v1, v2: v1 + 1 >= v2)

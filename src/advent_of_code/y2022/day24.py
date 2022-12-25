@@ -1,10 +1,6 @@
-import functools
-from math import lcm
-
 F = open("resources/inputs/2022/day24.txt").read().splitlines()
 H = len(F) - 2
 W = len(F[0]) - 2
-T = lcm(W, H)
 B = []
 DIR = {">": (1, 0), "<": (-1, 0), "^": (0, -1), "v": (0, 1)}
 D = list(DIR.values())
@@ -14,18 +10,10 @@ for y, line in enumerate(F):
             B.append((x - 1, y - 1, *d))
 
 
-@functools.cache
-def blizzards_at(t):
-    return {(1 + (bx + dx * t) % W, 1 + (by + dy * t) % H) for bx, by, dx, dy in B}
-
-
-def occupied(pos, t):
-    return pos in blizzards_at(t % T)
-
-
 def solve(t, start, end):
     current = [start]
     while current:
+        bliz = {(1 + (bx + dx * (t + 1)) % W, 1 + (by + dy * (t + 1)) % H) for bx, by, dx, dy in B}
         next_ = set()
         for pos in current:
             if pos == end:
@@ -35,9 +23,9 @@ def solve(t, start, end):
                 x1, y1 = x + dx, y + dy
                 pos1 = x1, y1
                 if 0 < y1 <= H and 0 < x1 <= W or pos1 == end:
-                    if not occupied(pos1, t + 1):
+                    if pos1 not in bliz:
                         next_.add(pos1)
-            if not occupied(pos, t + 1):
+            if pos not in bliz:
                 next_.add(pos)
         t += 1
         current = next_

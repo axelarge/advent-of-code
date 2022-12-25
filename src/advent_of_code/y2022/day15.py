@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 F = open("resources/inputs/2022/day15.txt").read().splitlines()
 D = []
@@ -6,47 +7,93 @@ for line in F:
     sx, sy, bx, by = map(int, re.findall(r"-?\d+", line))
     D.append((sx, sy, abs(sx - bx) + abs(sy - by)))
 
-Y = 2000000
+
+def merge(ranges):
+    ranges = sorted(ranges)
+    res = [ranges[0]]
+    for lo, hi in ranges[1:]:
+        if lo <= res[-1][1]:
+            res[-1] = (res[-1][0], max(hi, res[-1][1]))
+        else:
+            res.append((lo, hi))
+    return res
+
+
 r = []
 for sx, sy, d in D:
-    m = d - abs(Y - sy)
+    m = d - abs(2000000 - sy)
     if m > 0:
         r.append([sx - m, sx + m])
-r.sort()
-
-part1 = 0
-hii = r[0][0]
-for lo, hi in r:
-    part1 += max(0, hi - max(lo, hii))
-    hii = max(hii, hi)
+part1 = sum(hi - lo for lo, hi in merge(r))
 print(part1)
 assert part1 == 5564017
 
-
-def shells():
-    for sx, sy, d in D:
-        m = d + 1
-        # this is 3x faster than 4 yields in one loop
-        for i in range(m):
-            yield sx - m + i, sy + i
-        for i in range(m):
-            yield sx + i, sy + m - i
-        for i in range(m):
-            yield sx + m - i, sy - i
-        for i in range(m):
-            yield sx - i, sy - m + i
-
-
-part2 = None
-R = 4000000
-minx = max(0, min(sx for sx, sy, _ in D))
-maxx = min(R, max(sx for sx, sy, _ in D))
-miny = max(0, min(sy for sx, sy, _ in D))
-maxy = min(R, max(sy for sx, sy, _ in D))
-for x, y in shells():
-    if minx <= x <= maxx and miny <= y <= maxy:
-        if all(abs(sx - x) + abs(sy - y) > d for sx, sy, d in D):
-            part2 = x * 4000000 + y
-            break
+As, Bs, Cs, Ds = [Counter() for _ in range(4)]
+for sx, sy, d in D:
+    m = d + 1
+    a = sx - sy  # diagonal /
+    b = sx + sy  # diagonal \
+    As[a - m] += 1  # /.
+    Bs[b - m] += 1  # \.
+    Cs[a + m] += 1  # ./
+    Ds[b + m] += 1  # .\
+a = max(As, key=lambda k: As[k] * Cs[k])
+b = max(Bs, key=lambda k: Bs[k] * Ds[k])
+x = (a + b) // 2
+y = b - x
+part2 = x * 4000000 + y
 print(part2)
 assert part2 == 11558423398893
+
+# from collections import defaultdict
+#
+# def overlaps(*ranges):
+#     events = []
+#     for i, r in enumerate(ranges):
+#         for lo, hi in r:
+#             events.append((lo, i))
+#             events.append((hi, i))
+#     res = []
+#     open = set()
+#     for x, i in sorted(events):
+#         was_open = len(open) == 2
+#         open ^= {i}
+#         is_open = len(open) == 2
+#         if was_open ^ is_open:
+#             res.append(x)
+#     return res
+#
+# As, Bs, Cs, Ds = [defaultdict(list) for _ in range(4)]
+# for sx, sy, d in D:
+#     m = d + 1
+#     a = sx - sy  # diagonal /
+#     b = sx + sy  # diagonal \
+#     As[a - m].append([b - m, b + m])  # /.
+#     Bs[b - m].append([a - m, a + m])  # \.
+#     Cs[a + m].append([b - m, b + m])  # ./
+#     Ds[b + m].append([a - m, a + m])  # .\
+#
+# for coll in [As, Bs, Cs, Ds]:
+#     for k in coll:
+#         coll[k] = merge(coll[k])
+# a_overlap = []
+# for a in As:
+#     if over := overlaps(As[a], Cs[a]):
+#         a_overlap.append([a, over])
+# b_overlap = []
+# for b in Bs:
+#     if over := overlaps(Bs[b], Ds[b]):
+#         b_overlap.append([b, over])
+# a = a_overlap[0][0]
+# b = b_overlap[0][0]
+# for a, (blo, bhi) in a_overlap:
+#     for b, (alo, ahi) in b_overlap:
+#         print((a, b))
+#         if alo <= a <= ahi and blo <= b <= bhi:
+#             x = (a + b) // 2
+#             y = b - x
+#             if 0 <= x <= 4000000 and 0 <= y <= 4000000:
+#                 part2 = x * 4000000 + y
+#                 print((a, b), (x, y), part2)
+# print(part2)
+# assert part2 == 11558423398893

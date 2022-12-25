@@ -24,14 +24,16 @@ TILES = [[int(line.replace(".", "0").replace("#", "1"), 2)
          for tile in RAW_TILES.split("\n\n")]
 
 
-def debug(screen, prefix=""):
-    start = True
-    for line in reversed(screen):
-        if start and not line:
-            continue
-        start = False
-        print(prefix + bin(line)[2:].rjust(7, ".").replace("0", ".").replace("1", "#"))
-    print()
+def debug(screen, n):
+    res = []
+    for line in filter(None, reversed(screen)):
+        if line < 0 or n == 0:
+            break
+        res.append("|" + bin(line)[2:].rjust(7, "0").replace("0", ".").replace("1", "#") + "|")
+        n -= 1
+    res.append("+-------+" if line < 0 else "|+++++++|")
+
+    return res
 
 
 def collision(screen, tile, y):
@@ -93,8 +95,8 @@ def solve(rounds):
         else:
             seen[sig] = (i, top)
         i += 1
+    # print("\n".join(debug(screen, 20)))
 
-    # debug(screen[-20:])
     return top + skipped
 
 

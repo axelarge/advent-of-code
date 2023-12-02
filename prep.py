@@ -1,12 +1,14 @@
 #!/usr/local/bin/python3
 import argparse
+import datetime
 import subprocess
 from pathlib import Path
 
 import requests
 
+current_year = datetime.date.today().year
 parser = argparse.ArgumentParser(description="Create solution from template and fetch input")
-parser.add_argument("year", type=int, metavar="year", choices=range(2015, 2022 + 1), help="2015..2022")
+parser.add_argument("year", type=int, metavar="year", choices=range(2015, current_year + 1), help=f"2015..{current_year}")
 parser.add_argument("day", type=int, metavar="day", choices=range(1, 25 + 1), help="1..25")
 parser.add_argument("lang", choices=["clj", "py", "none"])
 parser.add_argument("--dry", action="store_true", help="Don't fetch input")

@@ -19,9 +19,9 @@ for c in F:
 seen = set()
 part1 = 0
 part2 = 0
-q = deque([((0, 0), 0)])
+q = [((0, 0), 0)]
 while q:
-    pos, n = q.popleft()
+    pos, n = q.pop()
     if pos not in seen:
         seen.add(pos)
         part1 = max(part1, n)

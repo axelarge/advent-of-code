@@ -5,22 +5,20 @@
 (def input (get-input 2022 12))
 
 (defn parse [input]
-  (mapv vec (str/split-lines input)))
+  (grid->map (mapv vec (str/split-lines input))))
 
 (defn normalize [v]
   (case v \S \a \E \z v))
 
 (defn can-go? [grid to from]
-  (when-let [from-val (normalize (get-in grid from))]
-    (when-let [to-val (normalize (get-in grid to))]
+  (when-let [from-val (normalize (get grid from))]
+    (when-let [to-val (normalize (get grid to))]
       (>= (int from-val) (dec (int to-val))))))
 
 (defn solve [input end?]
   (let [grid (parse input)]
-    (dijkstra (reduce-grid (fn [_ x y v] (when (= \E v) (reduced [y x])))
-                           nil
-                           grid)
-              #(end? (get-in grid %))
+    (dijkstra (key (first-where #(= \E (val %)) grid))
+              #(end? (get grid %))
               #(->> (neighbors4 %)
                     (filter (partial can-go? grid %))))))
 

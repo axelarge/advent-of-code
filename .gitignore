@@ -16,3 +16,4 @@ zig-out/
 zig-cache/
 .clj-kondo/
 .lsp/
+__pycache__

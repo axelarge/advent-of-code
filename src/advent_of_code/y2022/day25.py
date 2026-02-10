@@ -13,11 +13,8 @@ def parse(s):
 def dump(n):
     res = []
     while n:
-        digit = n % 5
-        res.append("012=-"[digit])
-        if digit > 2:
-            n += 5 - digit
-        n //= 5
+        n, digit = divmod(n + 2, 5)
+        res.append("=-012"[digit])
     return "".join(res[::-1])
 
 

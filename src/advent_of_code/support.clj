@@ -1,7 +1,7 @@
 (ns advent-of-code.support
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [clj-http.client :as http])
+            #_[clj-http.client :as http])
   (:import (clojure.lang PersistentQueue)
            (java.security MessageDigest)
            (java.time Instant ZoneId)
@@ -90,6 +90,15 @@
 (defn transpose [m]
   (apply mapv vector m))
 
+(defn zip [& colls]
+  (apply map vector colls))
+
+(defn zip-longest [& colls]
+  (->> colls
+       (map #(concat % (repeat nil)))
+       zip
+       (take-while (partial some some?))))
+
 (defn juxtv
   ([fs]
    (partial juxtv fs))
@@ -145,6 +154,22 @@
                           row))
              init
              grid))
+
+(defn grid->map [grid]
+  (persistent!
+    (reduce-grid (fn [m x y v] (assoc! m [x y] v))
+                 (transient {})
+                 grid)))
+
+(defn lines->map
+  ([s] (lines->map s identity))
+  ([s f]
+   (into {}
+         (for [[y line] (indexed (str/split-lines s))
+               [x c] (indexed line)
+               :let [c (f c)]
+               :when c]
+           [[x y] c]))))
 
 (defn display-xy-set [grid]
   (let [[minx maxx] (apply (juxt min max) (map first grid))
@@ -376,7 +401,7 @@
                                             [:1 :2])]))
                               (into (sorted-map)))))))))
 
-(defn fetch-leaderboard [year id]
-  (http/get (format "https://adventofcode.com/%s/leaderboard/private/view/%s.json" year id)
-            {:as :json
-             :cookies {:session {:value @token}}}))
+;;(defn fetch-leaderboard [year id]
+;;  (http/get (format "https://adventofcode.com/%s/leaderboard/private/view/%s.json" year id)
+;;            {:as :json
+;;             :cookies {:session {:value @token}}}))

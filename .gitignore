@@ -17,3 +17,4 @@ zig-cache/
 .clj-kondo/
 .lsp/
 __pycache__
+venv/

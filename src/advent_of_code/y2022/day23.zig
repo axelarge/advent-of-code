@@ -101,7 +101,7 @@ fn findMove(pos: XY, points: Set, offset: usize) ?XY {
         return null;
     }
 
-    for (moves, 0..) |_, i| {
+    for (0..moves.len) |i| {
         const move = moves[(i + offset) % moves.len];
         if (allFree(pos, points, move[1..])) {
             return pos.addXY(move[0]);
@@ -135,29 +135,3 @@ test {
     const eql = std.testing.expectEqual;
     try eql(Result.of(110, 20), try run(sample));
 }
-
-// TODO Why is this slower than using a map and recomputing multiple times?
-// fn findMove(pos: XY, points: Set, offset: usize) ?XY {
-//     const A = [_]XY{ XY.of(-1, -1), XY.of(0, -1), XY.of(1, -1), XY.of(1, 0), XY.of(1, 1), XY.of(0, 1), XY.of(-1, 1), XY.of(-1, 0) };
-//     const M = [_][3]u3{ .{ 0, 1, 2 }, .{ 4, 5, 6 }, .{ 6, 7, 0 }, .{ 2, 3, 4 } };
-//     const D = [_]XY{ XY.of(0, -1), XY.of(0, 1), XY.of(-1, 0), XY.of(1, 0) };
-//     var lut = [_]bool{false} ** 8;
-//     var any = false;
-//     for (A) |a, i| {
-//         if (points.contains(pos.addXY(a))) {
-//             lut[i] = true;
-//             any = true;
-//         }
-//     }
-//     if (!any) return null;
-
-//     var i: usize = 0;
-//     outer: while (i < M.len) : (i += 1) {
-//         const ii = (i + offset) % M.len;
-//         for (M[ii]) |j| {
-//             if (lut[j]) continue :outer;
-//         }
-//         return pos.addXY(D[ii]);
-//     }
-//     return pos;
-// }

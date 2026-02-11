@@ -11,7 +11,7 @@ fn run(input: []const u8) !Result {
 
 fn part1(input: []const u8) u32 {
     var res: u32 = 0;
-    var lines = std.mem.split(u8, input, "\n");
+    var lines = std.mem.splitSequence(u8, input, "\n");
     while (lines.next()) |line| {
         if (line.len == 0) break;
         const len = line.len / 2;
@@ -22,7 +22,7 @@ fn part1(input: []const u8) u32 {
 }
 
 fn part2(input: []const u8) !u32 {
-    var lines = std.mem.split(u8, input, "\n");
+    var lines = std.mem.splitSequence(u8, input, "\n");
     var res: u32 = 0;
     while (lines.rest().len > 1) {
         var seen = BitSet.full();
@@ -41,8 +41,8 @@ fn part2(input: []const u8) !u32 {
 
 fn value(c: u8) u6 {
     return switch (c) {
-        'a'...'z' => @intCast(u6, c - 'a' + 1),
-        'A'...'Z' => @intCast(u6, c - 'A' + 1 + 26),
+        'a'...'z' => @intCast(c - 'a' + 1),
+        'A'...'Z' => @intCast(c - 'A' + 1 + 26),
         else => unreachable,
     };
 }
@@ -57,7 +57,7 @@ test "2022.03 sample" {
         \\CrZsJsPPZsGzwwsLwLmpwMDw
     ;
 
-    var res = try run(sample);
+    const res = try run(sample);
     try std.testing.expectEqual(@as(u64, 157), res.part1.int);
     try std.testing.expectEqual(@as(u64, 70), res.part2.int);
 }

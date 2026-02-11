@@ -10,9 +10,9 @@ pub const Solution = root.Solution{ .year = 2022, .day = 5, .run = run };
 fn run(input: []const u8) !Result {
     var buf: [2048]u8 = undefined;
     var fba = std.heap.FixedBufferAllocator.init(&buf);
-    var alloc = fba.allocator();
+    const alloc = fba.allocator();
 
-    var raw = std.mem.split(u8, input, "\n\n");
+    var raw = std.mem.splitSequence(u8, input, "\n\n");
 
     const rawStacks = raw.next().?;
     // std.debug.print("Raw stacks: \n{s}\n", .{rawStacks});
@@ -21,7 +21,7 @@ fn run(input: []const u8) !Result {
     const stackSize = blk: {
         var size: usize = 0;
         for (rawStacks) |ch| {
-            size += @boolToInt(std.ascii.isAlphabetic(ch));
+            size += @intFromBool(std.ascii.isAlphabetic(ch));
         }
         break :blk size;
     };
@@ -50,11 +50,11 @@ fn run(input: []const u8) !Result {
     }
 
     // Perform steps
-    var steps = std.mem.split(u8, raw.next().?, "\n");
+    var steps = std.mem.splitSequence(u8, raw.next().?, "\n");
     while (steps.next()) |step| {
         if (step.len == 0) break;
 
-        var tokens = std.mem.tokenize(u8, step, " ");
+        var tokens = std.mem.tokenizeAny(u8, step, " ");
         _ = tokens.next();
         const n = try std.fmt.parseInt(u8, tokens.next().?, 10);
         _ = tokens.next();
@@ -65,7 +65,7 @@ fn run(input: []const u8) !Result {
         // Part 1
         var i: u8 = 0;
         while (i < n) : (i += 1) {
-            stacks.items[toIdx].appendAssumeCapacity(stacks.items[fromIdx].pop());
+            stacks.items[toIdx].appendAssumeCapacity(stacks.items[fromIdx].pop().?);
         }
 
         // Part 2
@@ -83,7 +83,7 @@ fn dropLast(comptime T: type, list: *std.ArrayList(T), n: usize) []T {
 
 fn getResult(stacks: Stacks) ![]u8 {
     var result = try root.resultAllocator.alloc(u8, stacks.items.len);
-    for (stacks.items) |stack, i| {
+    for (stacks.items, 0..) |stack, i| {
         result[i] = stack.items[stack.items.len - 1];
     }
     return result;

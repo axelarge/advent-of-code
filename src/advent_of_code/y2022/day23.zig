@@ -52,7 +52,7 @@ fn run(input: []const u8) !Result {
         nextGen = tmp;
 
         if (i == 9) {
-            part1 = @intCast(u64, countEmpties(points));
+            part1 = @intCast(countEmpties(points));
         }
     }
 
@@ -66,22 +66,22 @@ fn countEmpties(points: Set) i32 {
     var maxy: i32 = std.math.minInt(i32);
     var iter = points.keyIterator();
     while (iter.next()) |pos| {
-        minx = std.math.min(minx, pos.*.x);
-        maxx = std.math.max(maxx, pos.*.x);
-        miny = std.math.min(miny, pos.*.y);
-        maxy = std.math.max(maxy, pos.*.y);
+        minx = @min(minx, pos.*.x);
+        maxx = @max(maxx, pos.*.x);
+        miny = @min(miny, pos.*.y);
+        maxy = @max(maxy, pos.*.y);
     }
-    return (maxx - minx + 1) * (maxy - miny + 1) - @intCast(i32, points.count());
+    return (maxx - minx + 1) * (maxy - miny + 1) - @as(i32, @intCast(points.count()));
 }
 
 fn parse(input: []const u8, allocator: std.mem.Allocator) !Set {
     var points = Set.init(allocator);
-    var lines = std.mem.split(u8, input, "\n");
+    var lines = std.mem.splitSequence(u8, input, "\n");
     var row: i32 = 0;
     while (lines.next()) |line| : (row += 1) {
-        for (line) |ch, col| {
+        for (line, 0..) |ch, col| {
             if (ch == '#') {
-                try points.put(XY.of(@intCast(i32, col), row), {});
+                try points.put(XY.of(@intCast(col), row), {});
             }
         }
     }
@@ -101,7 +101,7 @@ fn findMove(pos: XY, points: Set, offset: usize) ?XY {
         return null;
     }
 
-    for (moves) |_, i| {
+    for (moves, 0..) |_, i| {
         const move = moves[(i + offset) % moves.len];
         if (allFree(pos, points, move[1..])) {
             return pos.addXY(move[0]);

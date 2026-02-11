@@ -12,29 +12,29 @@ fn run(input: []const u8) !Result {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    var monkeys = std.ArrayList(Monkey).init(allocator);
-    var rawMonkeys = std.mem.split(u8, input, "\n\n");
+    var monkeys: std.ArrayList(Monkey) = .{};
+    var rawMonkeys = std.mem.splitSequence(u8, input, "\n\n");
     while (rawMonkeys.next()) |rawMonkey| {
         if (rawMonkey.len == 0) break;
-        var lines = std.mem.split(u8, rawMonkey, "\n");
+        var lines = std.mem.splitSequence(u8, rawMonkey, "\n");
 
         // Monkey 0
         _ = lines.next();
 
         // Starting items: 93, 54, 69
-        var items = ItemList.init(allocator);
-        var numbers = std.mem.tokenize(u8, lines.next().?[18..], " ,");
+        var items: ItemList = .{};
+        var numbers = std.mem.tokenizeAny(u8, lines.next().?[18..], " ,");
         while (numbers.next()) |numStr| {
             const item = try std.fmt.parseInt(Item, numStr, 10);
-            try items.append(item);
+            try items.append(allocator, item);
         }
 
         // Operation: new = old * 3
-        var tokens = std.mem.split(u8, lines.next().?[19..], " ");
-        var lhs = try Arg.parse(tokens.next().?);
-        var opType = OpType.parse(tokens.next().?).?;
-        var rhs = try Arg.parse(tokens.next().?);
-        var op: Op = .{ .opType = opType, .lhs = lhs, .rhs = rhs };
+        var tokens = std.mem.splitSequence(u8, lines.next().?[19..], " ");
+        const lhs = try Arg.parse(tokens.next().?);
+        const opType = OpType.parse(tokens.next().?).?;
+        const rhs = try Arg.parse(tokens.next().?);
+        const op: Op = .{ .opType = opType, .lhs = lhs, .rhs = rhs };
 
         // Test: divisible by 7
         const divTest = try std.fmt.parseInt(u32, lines.next().?[21..], 10);
@@ -43,7 +43,7 @@ fn run(input: []const u8) !Result {
         // If false:  throw to monkey 3
         const falseIdx = try std.fmt.parseInt(u32, lines.next().?[30..], 10);
 
-        try monkeys.append(.{
+        try monkeys.append(allocator, .{
             .items = items,
             .op = op,
             .divTest = divTest,
@@ -65,7 +65,7 @@ fn solve(allocator: std.mem.Allocator, monkeys: []Monkey, comptime part1: bool) 
     }
 
     var inventory = try allocator.alloc(ItemList, monkeys.len);
-    for (inventory) |*slot, i| {
+    for (inventory, 0..) |*slot, i| {
         var list = try ItemList.initCapacity(allocator, totalItems);
         for (monkeys[i].items.items) |item| {
             list.appendAssumeCapacity(item);
@@ -73,11 +73,11 @@ fn solve(allocator: std.mem.Allocator, monkeys: []Monkey, comptime part1: bool) 
         slot.* = list;
     }
     var times = try allocator.alloc(u32, monkeys.len);
-    std.mem.set(u32, times, 0);
+    @memset(times, 0);
 
     var i: usize = 0;
     while (i < if (part1) 20 else 10000) : (i += 1) {
-        for (monkeys) |m, idx| {
+        for (monkeys, 0..) |m, idx| {
             var items = &inventory[idx];
             for (items.items) |oldItem| {
                 times[idx] += 1;
@@ -93,7 +93,7 @@ fn solve(allocator: std.mem.Allocator, monkeys: []Monkey, comptime part1: bool) 
             items.clearRetainingCapacity();
         }
     }
-    std.sort.sort(u32, times, {}, std.sort.desc(u32));
+    std.mem.sort(u32, times, {}, std.sort.desc(u32));
     return @as(u64, times[0]) * @as(u64, times[1]);
 }
 

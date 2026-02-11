@@ -7,11 +7,11 @@ pub const Solution = root.Solution{ .year = 2022, .day = 4, .run = run };
 fn run(input: []const u8) !Result {
     var part1: u32 = 0;
     var part2: u32 = 0;
-    var lines = std.mem.split(u8, input, "\n");
+    var lines = std.mem.splitSequence(u8, input, "\n");
     while (lines.next()) |line| {
         if (line.len == 0) continue;
 
-        var tokens = std.mem.tokenize(u8, line, "-,");
+        var tokens = std.mem.tokenizeAny(u8, line, "-,");
         const a = try std.fmt.parseInt(u32, tokens.next().?, 10);
         const b = try std.fmt.parseInt(u32, tokens.next().?, 10);
         const c = try std.fmt.parseInt(u32, tokens.next().?, 10);

@@ -6,7 +6,7 @@ pub const Solution = root.Solution{ .year = 2022, .day = 25, .run = run };
 
 fn run(input: []const u8) !Result {
     var part1: i64 = 0;
-    var lines = std.mem.split(u8, input, "\n");
+    var lines = std.mem.splitSequence(u8, input, "\n");
     while (lines.next()) |line| {
         part1 += toInt(line);
     }
@@ -37,9 +37,9 @@ inline fn toDigit(c: u8) i64 {
 }
 
 fn toSnafu(num: i64, allocator: std.mem.Allocator) ![]u8 {
-    var n = std.math.absCast(num);
+    var n = @abs(num);
     const neg = num < 0;
-    var buf = try allocator.alloc(u8, std.math.log(u64, 5, n) + 2);
+    var buf = try allocator.alloc(u8, std.math.log_int(u64, 5, n) + 2);
     var i: usize = 0;
     while (n != 0) {
         const digit = n % 5;

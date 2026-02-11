@@ -72,7 +72,7 @@ pub const XY = struct {
     }
 };
 
-pub fn resizeZFill(comptime T: type, list: *std.ArrayList(T), n: usize) !void {
+pub fn resizeZFill(comptime T: type, list: *std.ArrayList(T), gpa: std.mem.Allocator, n: usize) !void {
     if (list.items.len >= n) return;
-    try list.appendNTimes(0, n - list.items.len + 1);
+    try list.appendNTimes(gpa, 0, n - list.items.len + 1);
 }

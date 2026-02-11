@@ -6,10 +6,10 @@ pub const Solution = root.Solution{ .year = 2022, .day = 1, .run = run };
 
 fn run(input: []const u8) !Result {
     var max = [_]u32{0} ** 3;
-    var chunks = std.mem.split(u8, input, "\n\n");
+    var chunks = std.mem.splitSequence(u8, input, "\n\n");
     while (chunks.next()) |chunk| {
         var sum: u32 = 0;
-        var lines = std.mem.split(u8, chunk, "\n");
+        var lines = std.mem.splitSequence(u8, chunk, "\n");
         while (lines.next()) |line| {
             if (line.len > 0) {
                 sum += try std.fmt.parseInt(u32, line, 10);
@@ -46,7 +46,7 @@ test "2022.01 sample" {
         \\10000
     ;
 
-    var res = try run(data);
+    const res = try run(data);
     try std.testing.expectEqual(@as(u64, 24000), res.part1.int);
     try std.testing.expectEqual(@as(u64, 45000), res.part2.int);
 }

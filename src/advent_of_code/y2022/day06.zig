@@ -16,10 +16,10 @@ fn find(input: []const u8, n: u8) ?u32 {
     while (i < input.len - n) : (i += 1) {
         var bits = BitSet.empty();
         for (input[i .. i + n]) |ch| {
-            bits.add(@truncate(u5, ch - 'a'));
+            bits.add(@truncate(ch - 'a'));
         }
         if (@popCount(bits.bits) == n)
-            return @intCast(u32, i + n);
+            return @intCast(i + n);
     }
     return null;
 }
